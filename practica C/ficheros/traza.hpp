@@ -3,6 +3,7 @@
    /* Put the tokens into the symbol table, so that GDB and other debuggers
       know about them.  */
    enum yytokentype {
+     TCOMMENT = 257,
      TIDENTIFIER = 258,
      TINTEGER = 259,
      TDOUBLE = 260,

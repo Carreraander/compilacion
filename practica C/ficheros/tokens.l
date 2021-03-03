@@ -15,7 +15,7 @@
 %}
 
 %%
-prog	                TOKEN(RPROGRAM) ;
+program	                TOKEN(RPROGRAM) ;
 
 
 "*"                     TOKEN(TMUL);
@@ -28,13 +28,16 @@ prog	                TOKEN(RPROGRAM) ;
 
 "}"                     TOKEN(TRBRACE);
 
+","						TOKEN(TCOMMA);
+
 \/\/.+\n                ;
 
 [ \t\n]                 ;
 
-[a-zA-Z][a-zA-Z0-9]*    TOKEN(TIDENTIFIER) ; 
-[0-9]+\.[0-9]*          TOKEN(TDOUBLE);
-[0-9]+                  TOKEN(TINTEGER); 
+\[\*(([^\*]\])*[^\]]*)*\*\]					TOKEN(TCOMMENT) ;
+[a-zA-Z]+(_[a-zA-Z0-9]|[a-zA-Z0-9])*    	TOKEN(TIDENTIFIER) ; 
+[0-9]+\.[0-9]*((e|E)(\+|\-)?)?[0-9]+        TOKEN(TDOUBLE);
+[0-9]+                  					TOKEN(TINTEGER);  
 
 .                       { cout << "Token desconocido: " << yytext << endl; yyterminate();}
 %%
