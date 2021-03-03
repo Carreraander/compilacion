@@ -1,0 +1,251 @@
+Estado 10 conflictos: 4 desplazamiento/reducción
+Estado 11 conflictos: 4 desplazamiento/reducción
+Estado 12 conflictos: 4 desplazamiento/reducción
+Estado 13 conflictos: 4 desplazamiento/reducción
+
+
+Gramática
+
+    0 $accept: E $end
+
+    1 E: E TPLUS E
+    2  | E TMINUS E
+    3  | E TMUL E
+    4  | E TDIV E
+    5  | TIDENTIFIER
+    6  | TINTEGER
+    7  | TDOUBLE
+
+
+Terminales con las reglas donde aparecen
+
+$end (0) 0
+error (256)
+TIDENTIFIER (258) 5
+TINTEGER (259) 6
+TDOUBLE (260) 7
+TPLUS (261) 1
+TMINUS (262) 2
+TMUL (263) 3
+TDIV (264) 4
+
+
+No terminales con las reglas donde aparecen
+
+$accept (10)
+    en la izquierda: 0
+E (11)
+    en la izquierda: 1 2 3 4 5 6 7, en la derecha: 0 1 2 3 4
+
+
+Estado 0
+
+    0 $accept: . E $end
+    1 E: . E TPLUS E
+    2  | . E TMINUS E
+    3  | . E TMUL E
+    4  | . E TDIV E
+    5  | . TIDENTIFIER
+    6  | . TINTEGER
+    7  | . TDOUBLE
+
+    TIDENTIFIER  desplazar e ir al estado 1
+    TINTEGER     desplazar e ir al estado 2
+    TDOUBLE      desplazar e ir al estado 3
+
+    E  ir al estado 4
+
+
+Estado 1
+
+    5 E: TIDENTIFIER .
+
+    $default  reduce usando la regla 5 (E)
+
+
+Estado 2
+
+    6 E: TINTEGER .
+
+    $default  reduce usando la regla 6 (E)
+
+
+Estado 3
+
+    7 E: TDOUBLE .
+
+    $default  reduce usando la regla 7 (E)
+
+
+Estado 4
+
+    0 $accept: E . $end
+    1 E: E . TPLUS E
+    2  | E . TMINUS E
+    3  | E . TMUL E
+    4  | E . TDIV E
+
+    $end    desplazar e ir al estado 5
+    TPLUS   desplazar e ir al estado 6
+    TMINUS  desplazar e ir al estado 7
+    TMUL    desplazar e ir al estado 8
+    TDIV    desplazar e ir al estado 9
+
+
+Estado 5
+
+    0 $accept: E $end .
+
+    $default  aceptar
+
+
+Estado 6
+
+    1 E: . E TPLUS E
+    1  | E TPLUS . E
+    2  | . E TMINUS E
+    3  | . E TMUL E
+    4  | . E TDIV E
+    5  | . TIDENTIFIER
+    6  | . TINTEGER
+    7  | . TDOUBLE
+
+    TIDENTIFIER  desplazar e ir al estado 1
+    TINTEGER     desplazar e ir al estado 2
+    TDOUBLE      desplazar e ir al estado 3
+
+    E  ir al estado 10
+
+
+Estado 7
+
+    1 E: . E TPLUS E
+    2  | . E TMINUS E
+    2  | E TMINUS . E
+    3  | . E TMUL E
+    4  | . E TDIV E
+    5  | . TIDENTIFIER
+    6  | . TINTEGER
+    7  | . TDOUBLE
+
+    TIDENTIFIER  desplazar e ir al estado 1
+    TINTEGER     desplazar e ir al estado 2
+    TDOUBLE      desplazar e ir al estado 3
+
+    E  ir al estado 11
+
+
+Estado 8
+
+    1 E: . E TPLUS E
+    2  | . E TMINUS E
+    3  | . E TMUL E
+    3  | E TMUL . E
+    4  | . E TDIV E
+    5  | . TIDENTIFIER
+    6  | . TINTEGER
+    7  | . TDOUBLE
+
+    TIDENTIFIER  desplazar e ir al estado 1
+    TINTEGER     desplazar e ir al estado 2
+    TDOUBLE      desplazar e ir al estado 3
+
+    E  ir al estado 12
+
+
+Estado 9
+
+    1 E: . E TPLUS E
+    2  | . E TMINUS E
+    3  | . E TMUL E
+    4  | . E TDIV E
+    4  | E TDIV . E
+    5  | . TIDENTIFIER
+    6  | . TINTEGER
+    7  | . TDOUBLE
+
+    TIDENTIFIER  desplazar e ir al estado 1
+    TINTEGER     desplazar e ir al estado 2
+    TDOUBLE      desplazar e ir al estado 3
+
+    E  ir al estado 13
+
+
+Estado 10
+
+    1 E: E . TPLUS E
+    1  | E TPLUS E .  [$end, TPLUS, TMINUS, TMUL, TDIV]
+    2  | E . TMINUS E
+    3  | E . TMUL E
+    4  | E . TDIV E
+
+    TPLUS   desplazar e ir al estado 6
+    TMINUS  desplazar e ir al estado 7
+    TMUL    desplazar e ir al estado 8
+    TDIV    desplazar e ir al estado 9
+
+    TPLUS     [reduce usando la regla 1 (E)]
+    TMINUS    [reduce usando la regla 1 (E)]
+    TMUL      [reduce usando la regla 1 (E)]
+    TDIV      [reduce usando la regla 1 (E)]
+    $default  reduce usando la regla 1 (E)
+
+
+Estado 11
+
+    1 E: E . TPLUS E
+    2  | E . TMINUS E
+    2  | E TMINUS E .  [$end, TPLUS, TMINUS, TMUL, TDIV]
+    3  | E . TMUL E
+    4  | E . TDIV E
+
+    TPLUS   desplazar e ir al estado 6
+    TMINUS  desplazar e ir al estado 7
+    TMUL    desplazar e ir al estado 8
+    TDIV    desplazar e ir al estado 9
+
+    TPLUS     [reduce usando la regla 2 (E)]
+    TMINUS    [reduce usando la regla 2 (E)]
+    TMUL      [reduce usando la regla 2 (E)]
+    TDIV      [reduce usando la regla 2 (E)]
+    $default  reduce usando la regla 2 (E)
+
+
+Estado 12
+
+    1 E: E . TPLUS E
+    2  | E . TMINUS E
+    3  | E . TMUL E
+    3  | E TMUL E .  [$end, TPLUS, TMINUS, TMUL, TDIV]
+    4  | E . TDIV E
+
+    TPLUS   desplazar e ir al estado 6
+    TMINUS  desplazar e ir al estado 7
+    TMUL    desplazar e ir al estado 8
+    TDIV    desplazar e ir al estado 9
+
+    TPLUS     [reduce usando la regla 3 (E)]
+    TMINUS    [reduce usando la regla 3 (E)]
+    TMUL      [reduce usando la regla 3 (E)]
+    TDIV      [reduce usando la regla 3 (E)]
+    $default  reduce usando la regla 3 (E)
+
+
+Estado 13
+
+    1 E: E . TPLUS E
+    2  | E . TMINUS E
+    3  | E . TMUL E
+    4  | E . TDIV E
+    4  | E TDIV E .  [$end, TPLUS, TMINUS, TMUL, TDIV]
+
+    TPLUS   desplazar e ir al estado 6
+    TMINUS  desplazar e ir al estado 7
+    TMUL    desplazar e ir al estado 8
+    TDIV    desplazar e ir al estado 9
+
+    TPLUS     [reduce usando la regla 4 (E)]
+    TMINUS    [reduce usando la regla 4 (E)]
+    TMUL      [reduce usando la regla 4 (E)]
+    TDIV      [reduce usando la regla 4 (E)]
+    $default  reduce usando la regla 4 (E)

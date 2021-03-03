@@ -1,0 +1,11 @@
+programa ejemplo
+
+// esto es un comentario de línea
+   
+
+comienzo
+
+   a = 0.4756 * a ;
+   b = a* b * c ;
+
+fin ;
