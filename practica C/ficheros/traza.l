@@ -1,10 +1,42 @@
+
+%{
+ #include <string>
+ #include <iostream>
+ #include <vector>
+ #include "traza.hpp" 
+ using namespace std ;
+
+ #define TOKEN(t) processtoken(t, string(yytext, yyleng))
+
+ void processtoken (int t, string id) {
+   cout << t << " <" << id << ">" << endl ;
+ }
+
+%}
+%option nounput
 %%
-[Pp][Rr][Oo][Cc][Ee][Dd][Uu][Rr][Ee] {printf("[PROCEDURE]");}
-[Bb][Ee][Gg][Ii][Nn]                 {printf("[BEGIN]");}
-[Ee][Nn][Dd]                         {printf("[END]");}
-[Tt][Rr][Aa][Zz][Aa]                 {printf("[TRAZA]");}
-[a-zA-Z][a-zA-Z0-9]*                 {printf("[ID]");}
-\/\/.+\n                             ;
-\n				     {printf("\n");}
-.                                    ECHO;
+programa                TOKEN(RPROGRAM) ;
+comienzo                TOKEN(RBEGIN) ;
+fin	                TOKEN(RENDPROGRAM) ;
+
+"*"                     TOKEN(TMUL);
+
+"="                     TOKEN(TASSIG);
+
+";"                     TOKEN(TSEMIC);
+
+\/\/.+\n                printf("\nCOMENTARIO\n");
+
+[ \t\n]                 ;
+
+[a-zA-Z][a-zA-Z0-9]*    TOKEN(TIDENTIFIER) ; 
+[0-9]+\.[0-9]*          TOKEN(TDOUBLE);
+[0-9]+                  TOKEN(TINTEGER); 
+
+.                       { cout << "Token desconocido: " << yytext << endl; yyterminate();}
 %%
+
+int main() {
+  yylex() ;
+  cout << "Ha finalizado." << endl ; 
+}

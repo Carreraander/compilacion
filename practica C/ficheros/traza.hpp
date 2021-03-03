@@ -52,5 +52,5 @@
      RENDFOR = 304,
      RGET = 305,
      RPUT_LINE = 306
-    };
+   };
 #endif

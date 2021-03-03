@@ -15,15 +15,18 @@
 %}
 
 %%
-programa                TOKEN(RPROGRAM) ;
-comienzo                TOKEN(RBEGIN) ;
-fin	                TOKEN(RENDPROGRAM) ;
+prog	                TOKEN(RPROGRAM) ;
+
 
 "*"                     TOKEN(TMUL);
 
 "="                     TOKEN(TASSIG);
 
 ";"                     TOKEN(TSEMIC);
+
+"{"                     TOKEN(TLBRACE);
+
+"}"                     TOKEN(TRBRACE);
 
 \/\/.+\n                ;
 

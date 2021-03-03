@@ -26,13 +26,15 @@
 */
 %token <str> TIDENTIFIER TINTEGER TDOUBLE
 %token <str> TMUL
-%token <str> TSEMIC TASSIG
+%token <str> TSEMIC TASSIG TLBRACE TRBRACE
 %token <str> RPROGRAM RBEGIN RENDPROGRAM
 
-%type <str> programa
-%type <str> listasentencias
-%type <str> sentencia
+/* 
+   declaración de no terminales. Por ej:
 %type <str> expr
+*/
+
+
 
 %start programa
 
@@ -40,16 +42,16 @@
 
 programa : RPROGRAM  
            TIDENTIFIER 
-	   RBEGIN
+	   TLBRACE
 	   listasentencias
-	   RENDPROGRAM TSEMIC
-        ;
+	   TRBRACE TSEMIC
+         ;
 
-listasentencias : sentencia TSEMIC
-      | listasentencias sentencia TSEMIC
+listasentencias : listasentencias sentencia
+      | /*vacio*/
       ;
 
-sentencia :  TIDENTIFIER TASSIG expr ;
+sentencia :  TIDENTIFIER TASSIG expr TSEMIC;
 
 expr : TIDENTIFIER
      | TINTEGER
