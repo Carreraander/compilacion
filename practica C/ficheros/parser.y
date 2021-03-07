@@ -107,8 +107,9 @@ else : RELSE TLBRACE listasentenciassinproc TRBRACE
 
 do : RDO TLBRACE listasentenciasdo TRBRACE RUNTIL TIDENTIFIER comparacion expr TRBRACE TSEMIC;
 
-listasentenciasdo : RENDREPEAT RIF TIDENTIFIER comparacion expr TSEMIC
-      | listasentenciassinproc
+listasentenciasdo : RENDREPEAT RIF TIDENTIFIER comparacion expr TSEMIC listasentenciassinproc
+      | sentencia listasentenciasdo
+      | %empty
       ;
 
 llamada : TIDENTIFIER TLPAREN pasodeparametros TRPAREN TSEMIC;

@@ -16,9 +16,10 @@ tokens.cpp: tokens.l parser.hpp
 parser: parser.cpp main.cpp tokens.cpp
 	g++ $(CFLAGS) -o $@ *.cpp -ll
 
-prueba:  parser prueba_buena.in Error_en_el_println.in Error_Comentario.in Proc_sin_cerrar.in
-	./parser <prueba_buena.in
-	./parser <Error_en_el_println.in
-	./parser <Error_Comentario.in
-	./parser <Proc_sin_cerrar.in
+prueba: parser ./Pruebas
+	./parser <./Pruebas/PruebaBuena1.in
+	./parser <./Pruebas/PruebaBuena2.in
+	./parser <./Pruebas/Error_en_el_println.in
+	./parser <./Pruebas/Error_Comentario.in
+	./parser <./Pruebas/Proc_sin_cerrar.in
 

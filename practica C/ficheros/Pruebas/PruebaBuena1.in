@@ -12,6 +12,7 @@ program ejemplo_con_nombre_muy_largo {
  			iteracion = 0;
  			do{
  				resul = resul + 1;
+        skip if resul > 1000000;
  				aux = aux - 1;
  				iteraciones = iteraciones + 1;
  			}until aux == 0};

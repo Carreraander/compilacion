@@ -1,0 +1,49 @@
+program ejemplo_con_nombre_muy_largo {
+
+	proc suma(int <= x; int <= y; int <=> resul)
+		{	
+		aux = x;
+    resul = y;
+    if x==y{
+	   	if resul < 1000{
+			  iteraciones = 0;   	
+    		do {
+          do{
+            aux = aux - 10;
+            skip if resul > 1000000;
+            if aux<10{
+              println(iteraciones); 
+            };
+          }until aux == 0 };
+    			iteraciones = iteraciones + 1;
+          iteraciones = iteraciones + 1;
+          iteraciones = iteraciones + 1;
+          iteraciones = iteraciones + 1;
+    		}until aux == 0 };
+			}
+      else{
+				if resul < 0 { 
+          exit;
+        };					
+			};		
+    }  
+    else{
+      resul = resul + 1;
+      aux = aux - 1;
+      println(iteraciones);
+    };
+	} # fin de proc
+  int a, b, c,m,h,u,coma ;
+  float d, e,    
+  SiHagoUnSaltoDeLinea ;
+  [* esto es un **
+  fjnsvj[]][gdgkmek*****[ngjenbg
+  comentario multilinea *]
+  read(a*d*d/f); read(b+f+s/g);
+  d = 1/b;
+  e = 0.1e-1/a;
+  [* suma(a,b,c); esto solo para aquellos que 
+                 traten llamadas a procedimientos *]
+  c = c*(c*d)+e;
+  println(c*c+e/d);
+} 
