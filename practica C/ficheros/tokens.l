@@ -5,14 +5,12 @@
  #include <string>
  #include <iostream>
  #include <vector>
- #include "tokens.hpp" 
  using namespace std ;
+ #include "parser.hpp" 
 
- #define TOKEN(t) processtoken(t, string(yytext, yyleng))
+ #define TOKEN(t) yylval.str = new std::string(yytext, yyleng) ; return t 
 
- void processtoken (int t, string id) {
-   cout << t << " <" << id << ">" << endl ;
- }
+ extern "C" int yywrap() { return(1) ; }  
 
 %}
 %option nounput
@@ -70,8 +68,3 @@ exit					TOKEN(RENDPROGRAM);
 
 .                       { cout << "Token desconocido: " << yytext << endl; yyterminate();}
 %%
-
-int main() {
-  yylex() ;
-  cout << "Ha finalizado." << endl ; 
-}

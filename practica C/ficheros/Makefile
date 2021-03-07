@@ -3,7 +3,7 @@ CFLAGS=-Wall
 all: parser prueba
 
 clean:
-	rm parser.cpp parser.hpp parser tokens.cpp *~ 
+	rm parser.cpp parser.hpp parser tokens.cpp
 
 parser.cpp: parser.y
 	bison -d -o $@ $^
@@ -16,5 +16,9 @@ tokens.cpp: tokens.l parser.hpp
 parser: parser.cpp main.cpp tokens.cpp
 	g++ $(CFLAGS) -o $@ *.cpp -ll
 
-prueba:  parser prueba2.in 
-	./parser <prueba2.in
+prueba:  parser prueba_buena.in Error_en_el_println.in Error_Comentario.in Proc_sin_cerrar.in
+	./parser <prueba_buena.in
+	./parser <Error_en_el_println.in
+	./parser <Error_Comentario.in
+	./parser <Proc_sin_cerrar.in
+

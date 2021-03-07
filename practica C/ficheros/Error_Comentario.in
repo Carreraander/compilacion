@@ -3,7 +3,7 @@ program ejemplo_con_nombre_muy_largo {
  int a, b, c ;
  float d, e ;
  [* esto es un **
- comentario multilinea *]
+ comentario multilinea*] *]
 
 	proc suma(int <= x; int <= y; int <=> resul)
 		int aux, iteraciones;
@@ -34,4 +34,4 @@ program ejemplo_con_nombre_muy_largo {
                    traten llamadas a procedimientos *]
    c = c*(c*d)+e;
    println(c*c);
-}
+} 

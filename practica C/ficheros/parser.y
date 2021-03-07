@@ -48,6 +48,7 @@
 %type <str> if
 %type <str> else
 %type <str> do
+%type <str> listasentenciasdo
 %type <str> llamada
 %type <str> pasodeparametros
 %type <str> comparacion
@@ -59,22 +60,23 @@
 
 programa : RPROGRAM TIDENTIFIER TLBRACE listasentencias TRBRACE;
 
-listasentencias : listasentencias sentencia
-      | listasentencias RPROCEDURE TIDENTIFIER TLPAREN listaparametros TRPAREN TLBRACE listasentenciassinproc TRBRACE
+listasentencias : sentencia listasentencias
+      | RPROCEDURE TIDENTIFIER TLPAREN listaparametros TRPAREN TLBRACE listasentenciassinproc TRBRACE listasentencias
       | %empty
       ;
 
-listaparametros : listaparametros definicionparametro
+listaparametros : definicionparametro TSEMIC listaparametros
+      | definicionparametro
       | %empty
       ;
 
-definicionparametro : tipovar inout TIDENTIFIER TSEMIC;
+definicionparametro : tipovar inout TIDENTIFIER;
 
 tipovar : RINTEGER
       | RFLOAT
       ;
 
-listavars : listavars TIDENTIFIER TCOMMA
+listavars : TIDENTIFIER TCOMMA listavars
       | TIDENTIFIER TSEMIC
       ;
 
@@ -82,7 +84,7 @@ inout : RIN
       | ROUT
       ;
 
-listasentenciassinproc : listasentenciassinproc sentencia
+listasentenciassinproc : sentencia listasentenciassinproc
       | %empty
       ;
 
@@ -92,20 +94,27 @@ sentencia : TIDENTIFIER TASSIG expr TSEMIC
           | if
           | do
           | llamada
+          | RENDPROGRAM TSEMIC
           ;
 
-if : RIF TIDENTIFIER comparacion expr TLBRACE listasentenciassinproc TRBRACE else TSEMIC;
+if : RIF TIDENTIFIER comparacion expr TLBRACE listasentenciassinproc TRBRACE else TSEMIC
+  | RIF TIDENTIFIER comparacion expr TSEMIC
+  ;
 
-else : RELSE TLBRACE listasentenciassinproc TRBRACE TSEMIC
+else : RELSE TLBRACE listasentenciassinproc TRBRACE
     | %empty
     ;
 
-do : RDO TLBRACE listasentenciassinproc TRBRACE RUNTIL TIDENTIFIER comparacion expr TRBRACE TSEMIC;
+do : RDO TLBRACE listasentenciasdo TRBRACE RUNTIL TIDENTIFIER comparacion expr TRBRACE TSEMIC;
+
+listasentenciasdo : RENDREPEAT RIF TIDENTIFIER comparacion expr TSEMIC
+      | listasentenciassinproc
+      ;
 
 llamada : TIDENTIFIER TLPAREN pasodeparametros TRPAREN TSEMIC;
 
-pasodeparametros : pasodeparametros TIDENTIFIER TCOMMA
-      | pasodeparametros expr TCOMMA
+pasodeparametros : TIDENTIFIER TCOMMA pasodeparametros
+      | expr TCOMMA pasodeparametros
       | expr
       | TIDENTIFIER
       ;
@@ -119,6 +128,7 @@ expr : expr TPLUS expr
      | expr TMINUS expr
      | expr TMUL expr
      | expr TDIV expr
+     | TLPAREN expr TRPAREN
      | TIDENTIFIER
      | TINTEGER
      | TDOUBLE
