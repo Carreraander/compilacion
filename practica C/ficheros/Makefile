@@ -1,15 +1,20 @@
 CFLAGS=-Wall
 
-all: tokens prueba
+all: parser prueba
 
 clean:
-	rm tokens tokens.cpp *~
+	rm parser.cpp parser.hpp parser tokens.cpp *~ 
 
-tokens.cpp: tokens.l tokens.hpp
-	lex -o $@ tokens.l
+parser.cpp: parser.y
+	bison -d -o $@ $^
 
-tokens: tokens.cpp 
+parser.hpp: parser.cpp
+
+tokens.cpp: tokens.l parser.hpp
+	lex -o $@ $^
+
+parser: parser.cpp main.cpp tokens.cpp
 	g++ $(CFLAGS) -o $@ *.cpp -ll
 
-prueba:  tokens  prueba2.in
-	./tokens <prueba2.in
+prueba:  parser prueba2.in 
+	./parser <prueba2.in

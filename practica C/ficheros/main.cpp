@@ -3,7 +3,7 @@
 extern int yyparse();
 using namespace std;
 
-int main(int argc, char **argv)
+/*int main(int argc, char **argv)
 {
   cout << "ha comenzado..." << endl << endl ;
   if (yyparse() == 0) { 
@@ -13,4 +13,4 @@ int main(int argc, char **argv)
     cout << "ha finalizado MAL..." << endl << endl ;
   }
   return 0;
-}
+}*/

@@ -1,9 +1,11 @@
+%option yylineno 
+%option nounput
 
 %{
  #include <string>
  #include <iostream>
  #include <vector>
- #include "traza.hpp" 
+ #include "tokens.hpp" 
  using namespace std ;
 
  #define TOKEN(t) processtoken(t, string(yytext, yyleng))
