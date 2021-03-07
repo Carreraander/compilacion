@@ -24,7 +24,7 @@ program ejemplo_con_nombre_muy_largo {
 			};		#fin del do
 	    	};  #fin del if
 
-	 } # fin de proc
+	} # fin de proc
 
    {
    read(a); read(b);

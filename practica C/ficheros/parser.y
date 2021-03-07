@@ -24,9 +24,9 @@
 /* 
    declaración de tokens. Esto debe coincidir con tokens.l 
 */
-%token <str> TIDENTIFIER TINTEGER TDOUBLE
-%token <str> TMUL
-%token <str> TSEMIC TASSIG TLBRACE TRBRACE
+%token <str> TIDENTIFIER TINTEGER TDOUBLE TCOMMENT
+%token <str> TMUL TDIV TPLUS TMINUS
+%token <str> TSEMIC TASSIG TLBRACE TRBRACE TCOMMA 
 %token <str> RPROGRAM RBEGIN RENDPROGRAM
 
 /* 

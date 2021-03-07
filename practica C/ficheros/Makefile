@@ -1,15 +1,15 @@
 CFLAGS=-Wall
 
-all: traza prueba
+all: tokens prueba
 
 clean:
-	rm traza traza.cpp *~
+	rm tokens tokens.cpp *~
 
-traza.cpp: traza.l traza.hpp
-	lex -o $@ traza.l
+tokens.cpp: tokens.l tokens.hpp
+	lex -o $@ tokens.l
 
-traza: traza.cpp 
+tokens: tokens.cpp 
 	g++ $(CFLAGS) -o $@ *.cpp -ll
 
-prueba:  traza  prueba2.in
-	./traza <prueba2.in
+prueba:  tokens  prueba2.in
+	./tokens <prueba2.in
