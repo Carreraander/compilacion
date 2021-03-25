@@ -14,12 +14,14 @@ program ejemplo_con_nombre_muy_largo {
             if aux<10{
               println(iteraciones); 
             };
-          }until aux == 0 };
+          }until aux == 0
+			    else { aux = 1;};
     			iteraciones = iteraciones + 1;
           iteraciones = iteraciones + 1;
           iteraciones = iteraciones + 1;
           iteraciones = iteraciones + 1;
-    		}until aux == 0 };
+    		}until aux == 0
+			 else { aux = 1;};
 			}
       else{
 				if resul < 0 { 

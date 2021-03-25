@@ -20,117 +20,117 @@
 %union {
     string *str ; 
 }
-%left TMUL TDIV
+%left TMUL TDIV TPLUS TMINUS
 
 /* 
    declaración de tokens. Esto debe coincidir con tokens.l 
 */
-%token <str> TIDENTIFIER TINTEGER TDOUBLE TCOMMENT
-%token <str> TMUL TDIV TPLUS TMINUS
-%token <str> TSEMIC TASSIG TLBRACE TRBRACE TCOMMA TLPAREN TRPAREN
-%token <str> TEQUAL TCLT TCGT
-%token <str> RINTEGER RFLOAT RIF RELSE RDO RENDREPEAT RUNTIL RENDPROGRAM
-%token <str> RPROGRAM RPROCEDURE RIN ROUT
+%token <str> RINTEGER RFLOAT RIF RELSE RDO RWHILE RFOREVER RENDREPEAT RUNTIL RENDPROGRAM RPROGRAM RPROCEDURE RIN ROUT RREAD RPRINTLN
+%token <str> TMUL TDIV TPLUS TMINUS TASSIG 
+%token <str> TSEMIC TLBRACE TRBRACE TCOMMA TLPAREN TRPAREN
+%token <str> TEQUAL TLESS TLESSEQ TGREATER TGREATEREQ TNOTEQ TLESSEQGREATER
+%token <str> TINTEGER TDOUBLE TIDENTIFIER TCOMMENT
+
 
 /* 
    declaración de no terminales. Por ej:
 %type <str> expr
 */
-
+      /*
+      TODO:
+            Linea 108: ¿El until debe tener un else o unicamente puede ser un until?
+            Linea 111: ¿El Read deberia tener una unica variable o una expresion?
+      */
 %type <str> programa
-%type <str> listasentencias
-%type <str> definicionparametro
-%type <str> tipovar
-%type <str> listavars
-%type <str> inout
-%type <str> listasentenciassinproc
+%type <str> declaraciones
+%type <str> lista_de_ident
+%type <str> resto_lista_id
+%type <str> tipo
+%type <str> decl_de_subprogs
+%type <str> decl_de_subprograma
+%type <str> argumentos
+%type <str> lista_de_param
+%type <str> clase_par
+%type <str> resto_lis_de_param
+%type <str> lista_de_sentencias
 %type <str> sentencia
-%type <str> if
-%type <str> else
-%type <str> do
-%type <str> listasentenciasdo
-%type <str> llamada
-%type <str> pasodeparametros
-%type <str> comparacion
-%type <str> expr
+%type <str> variable
+%type <str> expresion
 
 %start programa
 
 %%
 
-programa : RPROGRAM TIDENTIFIER TLBRACE listasentencias TRBRACE;
+programa : RPROGRAM TIDENTIFIER declaraciones decl_de_subprogs TLBRACE lista_de_sentencias TRBRACE;
 
-listasentencias : sentencia listasentencias
-      | RPROCEDURE TIDENTIFIER TLPAREN listaparametros TRPAREN TLBRACE listasentenciassinproc TRBRACE listasentencias
+declaraciones :  tipo lista_de_ident TSEMIC declaraciones
       | %empty
       ;
 
-listaparametros : definicionparametro TSEMIC listaparametros
-      | definicionparametro
+lista_de_ident : TIDENTIFIER resto_lista_id;
+
+resto_lista_id :  TCOMMA TIDENTIFIER resto_lista_id
       | %empty
       ;
 
-definicionparametro : tipovar inout TIDENTIFIER;
-
-tipovar : RINTEGER
+tipo : RINTEGER
       | RFLOAT
       ;
 
-listavars : TIDENTIFIER TCOMMA listavars
-      | TIDENTIFIER TSEMIC
-      ;
-
-inout : RIN
-      | ROUT
-      ;
-
-listasentenciassinproc : sentencia listasentenciassinproc
+decl_de_subprogs : decl_de_subprograma decl_de_subprogs
       | %empty
       ;
 
-sentencia : TIDENTIFIER TASSIG expr TSEMIC
-          | TCOMMENT
-          | tipovar listavars
-          | if
-          | do
-          | llamada
-          | RENDPROGRAM TSEMIC
-          ;
+decl_de_subprograma : RPROCEDURE TIDENTIFIER argumentos declaraciones decl_de_subprogs TLBRACE lista_de_sentencias TRBRACE;
 
-if : RIF TIDENTIFIER comparacion expr TLBRACE listasentenciassinproc TRBRACE else TSEMIC
-  | RIF TIDENTIFIER comparacion expr TSEMIC
-  ;
-
-else : RELSE TLBRACE listasentenciassinproc TRBRACE
-    | %empty
-    ;
-
-do : RDO TLBRACE listasentenciasdo TRBRACE RUNTIL TIDENTIFIER comparacion expr TRBRACE TSEMIC;
-
-listasentenciasdo : RENDREPEAT RIF TIDENTIFIER comparacion expr TSEMIC listasentenciassinproc
-      | sentencia listasentenciasdo
+argumentos : TLPAREN lista_de_param TRPAREN
       | %empty
       ;
 
-llamada : TIDENTIFIER TLPAREN pasodeparametros TRPAREN TSEMIC;
+lista_de_param : tipo clase_par lista_de_ident resto_lis_de_param;
 
-pasodeparametros : TIDENTIFIER TCOMMA pasodeparametros
-      | expr TCOMMA pasodeparametros
-      | expr
-      | TIDENTIFIER
+clase_par : TGREATEREQ
+      | TLESSEQ
+      | TLESSEQGREATER
       ;
 
-comparacion : TCLT
-      | TCGT
-      | TEQUAL
+resto_lis_de_param : TSEMIC tipo clase_par lista_de_ident resto_lis_de_param
+      | %empty
       ;
 
-expr : expr TPLUS expr
-     | expr TMINUS expr
-     | expr TMUL expr
-     | expr TDIV expr
-     | TLPAREN expr TRPAREN
-     | TIDENTIFIER
-     | TINTEGER
-     | TDOUBLE
-     ;
+lista_de_sentencias : lista_de_sentencias sentencia 
+      | %empty
+      ;
+
+sentencia :  variable TASSIG expresion TSEMIC
+      | RIF expresion TLBRACE lista_de_sentencias TRBRACE TSEMIC
+      | RIF expresion TLBRACE lista_de_sentencias TRBRACE RELSE TLBRACE lista_de_sentencias TRBRACE TSEMIC
+      | RWHILE RFOREVER TLBRACE lista_de_sentencias TRBRACE TSEMIC
+      | RDO TLBRACE lista_de_sentencias TRBRACE RUNTIL expresion RELSE TLBRACE lista_de_sentencias TRBRACE TSEMIC
+      | RENDREPEAT RIF expresion TSEMIC
+      | RENDPROGRAM TSEMIC
+      | RREAD TLPAREN expresion TRPAREN TSEMIC
+      | RPRINTLN TLPAREN expresion TRPAREN TSEMIC
+      | TCOMMENT
+      | declaraciones
+      | decl_de_subprogs
+      ;
+
+variable : TIDENTIFIER;
+
+expresion : expresion TEQUAL expresion
+      | expresion TGREATER expresion
+      | expresion TLESS expresion
+      | expresion TGREATEREQ expresion
+      | expresion TLESSEQ expresion
+      | expresion TNOTEQ expresion
+      | expresion TPLUS expresion
+      | expresion TMINUS expresion
+      | expresion TMUL expresion
+      | expresion TDIV expresion
+      | variable
+      | TINTEGER
+      | TDOUBLE
+      | TLPAREN expresion TRPAREN
+      ;
+

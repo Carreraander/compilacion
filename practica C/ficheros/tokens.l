@@ -42,20 +42,26 @@ proc 					TOKEN(RPROCEDURE);
 
 
 "=="					TOKEN(TEQUAL);
-"<"     				TOKEN(TCLT);
-"<="     				TOKEN(RIN);
-">"     				TOKEN(TCGT);
-"<=>"					TOKEN(ROUT);
+"<"     				TOKEN(TLESS);
+"<="     				TOKEN(TLESSEQ);
+">"     				TOKEN(TGREATER);
+">="                    TOKEN(TGREATEREQ);
+"/="                    TOKEN(TNOTEQ);
+"<=>"					TOKEN(TLESSEQGREATER);
+
 
 int						TOKEN(RINTEGER);
 float					TOKEN(RFLOAT);
 if 						TOKEN(RIF);
 else					TOKEN(RELSE);
 do 						TOKEN(RDO);
+while                   TOKEN(RWHILE);
+forever                 TOKEN(RFOREVER);
 skip					TOKEN(RENDREPEAT);
 until					TOKEN(RUNTIL);
 exit					TOKEN(RENDPROGRAM);
-
+read                    TOKEN(RREAD);
+println                 TOKEN(RPRINTLN);
 
 "#"[^\n]*				TOKEN(TCOMMENT);										
 
