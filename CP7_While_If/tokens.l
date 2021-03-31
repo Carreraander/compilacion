@@ -31,7 +31,9 @@ endif                   TOKEN( RENDIF ) ;
 do                      TOKEN( RDO ) ;
 while			TOKEN( RWHILE ) ;
 endwhile		TOKEN( RENDWHILE ) ;
- 
+repeat                  TOKEN( RREPEAT) ;
+endrepeat               TOKEN( RENDREPEAT) ;
+until                   TOKEN( RUNTIL) ;
 [ \t\n]                 ;
 [a-zA-Z_][a-zA-Z0-9_]*  TOKEN( TIDENTIFIER ) ; 
 [0-9]+\.[0-9]*          TOKEN( TDOUBLE ) ;

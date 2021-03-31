@@ -43,7 +43,7 @@
 %token <str> TLPAREN TRPAREN TCOMMA
 %token <str> TPLUS TMINUS TMUL TDIV
 %token <str> TCOLON TSEMIC TASSIG
-%token <str> RPROGRAM RIS RBEGIN RENDPROGRAM RVAR RINTEGER RFLOAT RIF RTHEN RELSE RENDIF RDO RWHILE RENDWHILE
+%token <str> RPROGRAM RIS RBEGIN RENDPROGRAM RREPEAT RUNTIL RENDREPEAT RVAR RINTEGER RFLOAT RIF RTHEN RELSE RENDIF RDO RWHILE RENDWHILE
 
 %type <str> ident
 %type <str> numeric 
@@ -123,7 +123,7 @@ stmt :  ident TASSIG expr {
 	      delete $2 ;
          }
 
-        | RWHILE M expr RDO M stmts M RENDWHILE
+   | RWHILE M expr RDO M stmts M RENDWHILE
 	{ codigo.completarInstrucciones($3->trues,$5) ;
     	  codigo.completarInstrucciones($3->falses,$7+1) ;
 	 
@@ -134,6 +134,22 @@ stmt :  ident TASSIG expr {
 	}  
 	
        ;
+      /* setencia := repetir M stmts until E M enrepetir
+   {
+         completarInstrucciones(E.true, M2.ref);
+         completarInstrucciones(E.false, M1.ref);
+
+   }
+   */
+
+	| RREPEAT M stmts RUNTIL expr M RENDREPEAT
+	{  
+      
+      codigo.completarInstrucciones($6->trues,$7) ;
+    	   codigo.completarInstrucciones($6->falses,$2) ;	 
+
+	}
+      ;
 
 M:  { $$ = codigo.obtenRef() ; }
 	;
