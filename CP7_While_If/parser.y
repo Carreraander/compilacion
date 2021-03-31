@@ -116,7 +116,12 @@ stmt :  ident TASSIG expr {
        	  codigo.completarInstrucciones(*$6, $10) ;
 	      delete $2 ;
          }
-
+   | RIF expr RTHEN M stmts M RENDIF
+   {
+	  codigo.completarInstrucciones($2->trues,$4) ;
+    	  codigo.completarInstrucciones($2->falses,$6) ;
+	      delete $2 ;
+         }
 
         | RWHILE M expr RDO M stmts M RENDWHILE
 	{ codigo.completarInstrucciones($3->trues,$5) ;
