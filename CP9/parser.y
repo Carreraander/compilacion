@@ -110,13 +110,12 @@ list : ident {
 
 stmts : stmt TSEMIC
        {
-        $$ = new vector<int>;
-        *$$ = {};
+        $$ = $1;
        } //Añadir la acción correspondiente
       | stmts stmt TSEMIC //Añadir la acción correspondiente
       {
         $$ = new vector<int>;
-        $$ = unir(*$2, *$1);
+        $$ = unir(*$1, *$2);
       }
       ;
 
@@ -125,7 +124,6 @@ stmt :  ident TASSIG expr {
     	  delete $1 ; delete $3;
 	 //Falta inicializar el atributo de stmt
         $$ = new vector<int>;
-        *$$ = {};
          }
 	
 	|  RIF expr RTHEN M
@@ -140,8 +138,7 @@ stmt :  ident TASSIG expr {
     	  	codigo.completarInstrucciones(*$6, $10) ;
 	      	delete $2 ;
  		//Falta inicializar el atributo de stmt
-		      $$ = new vector<int>;
-          *$$ = {};
+		      $$ = unir(*$5, *$9);
          }
 
 
@@ -159,16 +156,15 @@ stmt :  ident TASSIG expr {
     codigo.completarInstrucciones(*$6, $7+1);
  	  //Falta inicializar el atributo de stmt
     $$ = new vector<int>;
-    *$$ = {};
+    
 	}  
 	
 		
 	| REXIT RIF expr M
 	{ 
-	   //Falta su traducción
     codigo.completarInstrucciones($3->falses, $4);
-    $$ = new vector<int>;
     *$$ = $3->trues;
+    delete $3;
 	}
 
   | REXIT
@@ -253,10 +249,9 @@ expresionstruct makearithmetic(std::string &s1, std::string &s2, std::string &s3
 }
 
 //Falta la función unir
-vector<int>   *unir(std::vector<int> s1, std::vector<int> s2) {
-  vector<int>* nuevalista = new vector<int>;
-  nuevalista->insert(nuevalista->begin(), s1.begin(), s1.end());
-  nuevalista->insert(nuevalista->end(), s2.begin(), s2.end());
+vector<int> *unir(vector<int> lis1, vector<int> lis2){
+  std::vector<int> *nuevalista = new vector<int>;
+  nuevalista->insert(nuevalista->begin(), lis1.begin(), lis1.end());
+  nuevalista->insert(nuevalista->end(), lis2.begin(), lis2.end());
   return nuevalista;
 }
-
