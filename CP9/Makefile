@@ -19,3 +19,4 @@ prueba:
 	./parser <prueba1.in	
 	./parser <prueba2.in
 	./parser <prueba3.in
+	./parser <prueba4.in

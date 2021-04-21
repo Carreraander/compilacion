@@ -76,11 +76,15 @@ program : RPROGRAM { codigo.anadirInstruccion("prog;" ) ;}
           ident RIS
 	      decls
 	      RBEGIN
-	      stmts 
+	      stmts
 	      RENDPROGRAM TSEMIC {
             codigo.anadirInstruccion("halt;");
-		    codigo.escribir() ; 
-           }
+		        codigo.escribir() ;
+            if ($7->size() > 0){
+              cout << "Hay exit fuera del while ";
+              cout << "";
+            }
+        }
         ;
 
 
@@ -200,6 +204,8 @@ expr : ident   { $$ = new expresionstruct; $$->str = *$1; }
 			 *$$ = makearithmetic($1->str,*$2,$3->str) ;
 			delete $1; delete $3; }
      | expr TDIV expr   {$$ = new expresionstruct;
+      //Es validación dinámica ya que se realiza en tiempo de ejecucion
+       codigo.anadirInstruccion("if " + $3->str + " = 0 " + "goto ERRORDIV0;");    
 			 *$$ = makearithmetic($1->str,*$2,$3->str) ;
 			delete $1; delete $3; }
      | expr TCEQ expr { $$ = new expresionstruct;
@@ -243,8 +249,8 @@ expresionstruct makecomparison(std::string &s1, std::string &s2, std::string &s3
 
 expresionstruct makearithmetic(std::string &s1, std::string &s2, std::string &s3) {
   expresionstruct tmp ; 
-  tmp.str = codigo.nuevoId() ;
-  codigo.anadirInstruccion(tmp.str + ":=" + s1 + s2 + s3 + ";") ;     
+  tmp.str = codigo.nuevoId();
+  codigo.anadirInstruccion(tmp.str + ":=" + s1 + s2 + s3 + ";") ;      
   return tmp ;
 }
 

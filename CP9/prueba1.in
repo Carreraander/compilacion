@@ -1,16 +1,17 @@
+// exit con condición y SEM:div/0
 program prueba1 is
 
 var a,b : integer ;
 
 begin
 
-  a:= 0;
+	
   while (a+3 < b-3) do
     
-    exit if a > 20;
+    exit if b < 0;
     a := a + 1;
+    a := a / b;
    
-  endwhile ;
- 
+  endwhile ; 
 
 endprogram ;
