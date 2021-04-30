@@ -1,19 +1,18 @@
-%option yylineno 
+%option yylineno
 %option nounput
 
 %{
  #include <string>
- #include <iostream>
  #include <vector>
+ #include <algorithm>
  using namespace std ;
- #include "parser.hpp" 
+ #include "Exp.hpp"
+ #include "parser.hpp"
 
  #define TOKEN(t) yylval.str = new std::string(yytext, yyleng) ; return t 
-
  extern "C" int yywrap() { return(1) ; }  
-
 %}
-%option nounput
+
 %%
 program                 TOKEN(RPROGRAM);
 proc 					TOKEN(RPROCEDURE);
@@ -47,7 +46,9 @@ proc 					TOKEN(RPROCEDURE);
 ">"     				TOKEN(TGREATER);
 ">="                    TOKEN(TGREATEREQ);
 "/="                    TOKEN(TNOTEQ);
-"<=>"					TOKEN(TLESSEQGREATER);
+
+"=>"					TOKEN(TVAL);
+"<=>"					TOKEN(TREF);
 
 
 int						TOKEN(RINTEGER);
@@ -72,5 +73,5 @@ println                 TOKEN(RPRINTLN);
 [0-9]+\.[0-9]*((e|E)(\+|\-)?)?[0-9]+          TOKEN(TDOUBLE);
 [0-9]+                  					TOKEN(TINTEGER); 
 
-.                       { cout << "Token desconocido: " << yytext << endl; yyterminate();}
+.                       printf("Token desconocido!\n"); yyterminate();
 %%

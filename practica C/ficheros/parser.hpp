@@ -49,26 +49,26 @@ extern int yydebug;
 # define YYTOKENTYPE
   enum yytokentype
   {
-    TMUL = 258,
-    TDIV = 259,
-    TPLUS = 260,
-    TMINUS = 261,
-    RINTEGER = 262,
-    RFLOAT = 263,
-    RIF = 264,
-    RELSE = 265,
-    RDO = 266,
-    RWHILE = 267,
-    RFOREVER = 268,
-    RENDREPEAT = 269,
-    RUNTIL = 270,
-    RENDPROGRAM = 271,
-    RPROGRAM = 272,
-    RPROCEDURE = 273,
-    RIN = 274,
-    ROUT = 275,
-    RREAD = 276,
-    RPRINTLN = 277,
+    RINTEGER = 258,
+    RFLOAT = 259,
+    RIF = 260,
+    RELSE = 261,
+    RDO = 262,
+    RWHILE = 263,
+    RFOREVER = 264,
+    RENDREPEAT = 265,
+    RUNTIL = 266,
+    RENDPROGRAM = 267,
+    RPROGRAM = 268,
+    RPROCEDURE = 269,
+    RIN = 270,
+    ROUT = 271,
+    RREAD = 272,
+    RPRINTLN = 273,
+    TMUL = 274,
+    TDIV = 275,
+    TPLUS = 276,
+    TMINUS = 277,
     TASSIG = 278,
     TSEMIC = 279,
     TLBRACE = 280,
@@ -77,16 +77,17 @@ extern int yydebug;
     TLPAREN = 283,
     TRPAREN = 284,
     TEQUAL = 285,
-    TLESS = 286,
-    TLESSEQ = 287,
-    TGREATER = 288,
-    TGREATEREQ = 289,
-    TNOTEQ = 290,
-    TLESSEQGREATER = 291,
-    TINTEGER = 292,
-    TDOUBLE = 293,
-    TIDENTIFIER = 294,
-    TCOMMENT = 295
+    TNOTEQ = 286,
+    TLESS = 287,
+    TLESSEQ = 288,
+    TGREATER = 289,
+    TGREATEREQ = 290,
+    TVAL = 291,
+    TREF = 292,
+    TINTEGER = 293,
+    TDOUBLE = 294,
+    TIDENTIFIER = 295,
+    TCOMMENT = 296
   };
 #endif
 
@@ -94,11 +95,15 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 20 "parser.y"
+#line 34 "parser.y"
 
     string *str ; 
+    vector<string> *list ;
+    expresionstruct *expr ;
+    int number ;
+    vector<int> *numlist;
 
-#line 102 "parser.hpp"
+#line 107 "parser.hpp"
 
 };
 typedef union YYSTYPE YYSTYPE;

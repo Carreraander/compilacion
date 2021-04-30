@@ -1,3 +1,5 @@
+%error-verbose
+
 %{
    #include <stdio.h>
    #include <iostream>
@@ -12,15 +14,30 @@
      printf("line %d: %s at '%s'\n", yylineno, msg, yytext) ;
    }
 
+   #include "Codigo.hpp"
+   #include "Exp.hpp"
+
+
+   expresionstruct makecomparison(std::string &s1, std::string &s2, std::string &s3) ;
+   expresionstruct makearithmetic(std::string &s1, std::string &s2, std::string &s3) ;
+
+   vector<int> *unir(vector<int> lis1, vector<int> lis2);
+
+
+   Codigo codigo;
+
 %}
 
 /* 
-   qué atributos tienen los tokens 
+   qué atributos tienen los símbolos 
 */
 %union {
     string *str ; 
+    vector<string> *list ;
+    expresionstruct *expr ;
+    int number ;
+    vector<int> *numlist;
 }
-%left TMUL TDIV TPLUS TMINUS
 
 /* 
    declaración de tokens. Esto debe coincidir con tokens.l 
@@ -28,7 +45,8 @@
 %token <str> RINTEGER RFLOAT RIF RELSE RDO RWHILE RFOREVER RENDREPEAT RUNTIL RENDPROGRAM RPROGRAM RPROCEDURE RIN ROUT RREAD RPRINTLN
 %token <str> TMUL TDIV TPLUS TMINUS TASSIG 
 %token <str> TSEMIC TLBRACE TRBRACE TCOMMA TLPAREN TRPAREN
-%token <str> TEQUAL TLESS TLESSEQ TGREATER TGREATEREQ TNOTEQ TLESSEQGREATER
+%token <str> TEQUAL TNOTEQ TLESS TLESSEQ TGREATER TGREATEREQ
+%token <str> TVAL TREF
 %token <str> TINTEGER TDOUBLE TIDENTIFIER TCOMMENT
 
 
@@ -41,10 +59,11 @@
             Linea 108: ¿El until debe tener un else o unicamente puede ser un until?
             Linea 111: ¿El Read deberia tener una unica variable o una expresion?
       */
+
 %type <str> programa
 %type <str> declaraciones
-%type <str> lista_de_ident
-%type <str> resto_lista_id
+%type <list> lista_de_ident
+%type <list> resto_lista_id
 %type <str> tipo
 %type <str> decl_de_subprogs
 %type <str> decl_de_subprograma
@@ -52,24 +71,53 @@
 %type <str> lista_de_param
 %type <str> clase_par
 %type <str> resto_lis_de_param
-%type <str> lista_de_sentencias
-%type <str> sentencia
 %type <str> variable
 %type <str> expresion
+%type <number> M
+%type <numlist> N
+%type <numlist> lista_de_sentencias
+%type <numlist> sentencia
+
+%nonassoc TEQUAL TNOTEQ TLESS TLESSEQ TGREATER TGREATEREQ
+%left TPLUS TMINUS
+%left TMUL TDIV
 
 %start programa
 
 %%
 
-programa : RPROGRAM TIDENTIFIER declaraciones decl_de_subprogs TLBRACE lista_de_sentencias TRBRACE;
+programa : RPROGRAM TIDENTIFIER 
+          {
+            codigo.anadirInstruccion("prog " + *$2 + ";");
+          } 
+          declaraciones decl_de_subprogs TLBRACE lista_de_sentencias TRBRACE
+          {
+            codigo.anadirInstruccion("halt;");
+            codigo.escribir();
+          }
 
-declaraciones :  tipo lista_de_ident TSEMIC declaraciones
+declaraciones :  tipo lista_de_ident TSEMIC 
+              {
+                codigo.anadirDeclaraciones(*$2, *$1);
+              }
+      declaraciones
       | %empty
       ;
 
-lista_de_ident : TIDENTIFIER resto_lista_id;
+lista_de_ident : TIDENTIFIER resto_lista_id
+      {
+        $$ = new vector<string>;
+        $2->push_back(*$1);
+        $$ = $2;
+      }
+      ;
 
-resto_lista_id :  TCOMMA TIDENTIFIER resto_lista_id
+resto_lista_id : TCOMMA TIDENTIFIER resto_lista_id
+      {
+        $$ = new vector<string>;
+        $3->push_back(*$2);
+        $$ = $3;
+      }
       | %empty
       ;
 
@@ -89,9 +137,9 @@ argumentos : TLPAREN lista_de_param TRPAREN
 
 lista_de_param : tipo clase_par lista_de_ident resto_lis_de_param;
 
-clase_par : TGREATEREQ
+clase_par : TVAL
       | TLESSEQ
-      | TLESSEQGREATER
+      | TREF
       ;
 
 resto_lis_de_param : TSEMIC tipo clase_par lista_de_ident resto_lis_de_param
@@ -103,6 +151,10 @@ lista_de_sentencias : lista_de_sentencias sentencia
       ;
 
 sentencia :  variable TASSIG expresion TSEMIC
+      { 
+        //Falta inicializar el atributo de stmt
+        $$ = new vector<int>;
+      }
       | RIF expresion TLBRACE lista_de_sentencias TRBRACE TSEMIC
       | RIF expresion TLBRACE lista_de_sentencias TRBRACE RELSE TLBRACE lista_de_sentencias TRBRACE TSEMIC
       | RWHILE RFOREVER TLBRACE lista_de_sentencias TRBRACE TSEMIC
@@ -134,3 +186,39 @@ expresion : expresion TEQUAL expresion
       | TLPAREN expresion TRPAREN
       ;
 
+M: %empty { $$ = codigo.obtenRef() ; }
+  ;
+
+N: %empty {
+  $$ = new vector<int>; 
+        vector<int> tmp1 ; tmp1.push_back(codigo.obtenRef()) ;
+  *$$ = tmp1;
+  codigo.anadirInstruccion("goto");}
+        ;
+
+%%
+
+expresionstruct makecomparison(std::string &s1, std::string &s2, std::string &s3) {
+  expresionstruct tmp ; 
+  tmp.trues.push_back(codigo.obtenRef()) ;
+  tmp.falses.push_back(codigo.obtenRef()+1) ;
+  codigo.anadirInstruccion("if " + s1 + s2 + s3 + " goto") ;
+  codigo.anadirInstruccion("goto") ;
+  return tmp ;
+}
+
+
+expresionstruct makearithmetic(std::string &s1, std::string &s2, std::string &s3) {
+  expresionstruct tmp ; 
+  tmp.str = codigo.nuevoId() ;
+  codigo.anadirInstruccion(tmp.str + ":=" + s1 + s2 + s3 + ";") ;     
+  return tmp ;
+}
+
+//Falta la función unir
+vector<int> *unir(vector<int> lis1, vector<int> lis2){
+  std::vector<int> *nuevalista = new vector<int>;
+  nuevalista->insert(nuevalista->begin(), lis1.begin(), lis1.end());
+  nuevalista->insert(nuevalista->end(), lis2.begin(), lis2.end());
+  return nuevalista;
+}
