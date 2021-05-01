@@ -47,7 +47,7 @@ proc 					TOKEN(RPROCEDURE);
 ">="                    TOKEN(TGREATEREQ);
 "/="                    TOKEN(TNOTEQ);
 
-"=>"					TOKEN(TVAL);
+"=>"					TOKEN(TREF);
 "<=>"					TOKEN(TREF);
 
 
@@ -60,7 +60,7 @@ while                   TOKEN(RWHILE);
 forever                 TOKEN(RFOREVER);
 skip					TOKEN(RENDREPEAT);
 until					TOKEN(RUNTIL);
-exit					TOKEN(RENDPROGRAM);
+exit					TOKEN(REXIT);
 read                    TOKEN(RREAD);
 println                 TOKEN(RPRINTLN);
 

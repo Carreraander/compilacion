@@ -1,0 +1,11 @@
+program ejemplo_con_nombre_muy_largo 
+
+	int a, b, c;
+  float d, e;
+  proc sumar ( int <= x; int <= y; int <=> resul)   
+    int aux, iteraciones;
+    {
+    }
+{
+  
+}

@@ -4,7 +4,7 @@ FUENTES=parser.cpp main.cpp tokens.cpp Codigo.cpp
 all: parser prueba
 
 clean:
-	rm parser.cpp parser.hpp parser tokens.cpp
+	rm parser.cpp parser.hpp parser tokens.cpp *~
 
 parser.cpp parser.hpp: parser.y 
 	bison -d -o $@ $<
@@ -16,9 +16,5 @@ parser: $(FUENTES) Codigo.hpp Exp.hpp
 	g++ $(CFLAGS) -o $@ $(FUENTES) 
 
 prueba: parser ./Pruebas
-	./parser <./Pruebas/PruebaBuena1.in
-	./parser <./Pruebas/PruebaBuena2.in
-	./parser <./Pruebas/Error_en_el_println.in
-	./parser <./Pruebas/Error_Comentario.in
-	./parser <./Pruebas/Proc_sin_cerrar.in
+	./parser <./Pruebas/pruebapequena.in
 

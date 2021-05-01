@@ -42,7 +42,7 @@
 /* 
    declaración de tokens. Esto debe coincidir con tokens.l 
 */
-%token <str> RINTEGER RFLOAT RIF RELSE RDO RWHILE RFOREVER RENDREPEAT RUNTIL RENDPROGRAM RPROGRAM RPROCEDURE RIN ROUT RREAD RPRINTLN
+%token <str> RINTEGER RFLOAT RIF RELSE RDO RWHILE RFOREVER RENDREPEAT RUNTIL RENDPROGRAM RPROGRAM RPROCEDURE RIN ROUT RREAD RPRINTLN REXIT
 %token <str> TMUL TDIV TPLUS TMINUS TASSIG 
 %token <str> TSEMIC TLBRACE TRBRACE TCOMMA TLPAREN TRPAREN
 %token <str> TEQUAL TNOTEQ TLESS TLESSEQ TGREATER TGREATEREQ
@@ -54,11 +54,6 @@
    declaración de no terminales. Por ej:
 %type <str> expr
 */
-      /*
-      TODO:
-            Linea 108: ¿El until debe tener un else o unicamente puede ser un until?
-            Linea 111: ¿El Read deberia tener una unica variable o una expresion?
-      */
 
 %type <str> programa
 %type <str> declaraciones
@@ -72,7 +67,7 @@
 %type <str> clase_par
 %type <str> resto_lis_de_param
 %type <str> variable
-%type <str> expresion
+%type <expr> expresion
 %type <number> M
 %type <numlist> N
 %type <numlist> lista_de_sentencias
@@ -106,84 +101,193 @@ declaraciones :  tipo lista_de_ident TSEMIC
 
 lista_de_ident : TIDENTIFIER resto_lista_id
       {
-        $$ = new vector<string>;
-        $2->push_back(*$1);
-        $$ = $2;
+      $$ = new vector<string>;
+      $2->push_back(*$1);
+      $$ = $2;
       }
       ;
 
 resto_lista_id : TCOMMA TIDENTIFIER resto_lista_id
       {
-        $$ = new vector<string>;
-        $3->push_back(*$2);
-        $$ = $3;
+      $$ = new vector<string>;
+      $3->push_back(*$2);
+      $$ = $3;
       }
       | %empty
+      {
+      $$ = new vector<string>;
+      *$$ = {};
+      }
       ;
 
-tipo : RINTEGER
-      | RFLOAT
+tipo : RINTEGER {*$$ = "ent";}
+      | RFLOAT {*$$ = "real";}
       ;
 
 decl_de_subprogs : decl_de_subprograma decl_de_subprogs
       | %empty
       ;
 
-decl_de_subprograma : RPROCEDURE TIDENTIFIER argumentos declaraciones decl_de_subprogs TLBRACE lista_de_sentencias TRBRACE;
+decl_de_subprograma : RPROCEDURE TIDENTIFIER 
+                    {
+                      codigo.anadirInstruccion("proc " + *$2 + ";");
+                    } 
+                    argumentos declaraciones decl_de_subprogs TLBRACE lista_de_sentencias TRBRACE
+                    {
+                      codigo.anadirInstruccion("endproc;");
+                    }
+                    ;
 
 argumentos : TLPAREN lista_de_param TRPAREN
       | %empty
       ;
 
-lista_de_param : tipo clase_par lista_de_ident resto_lis_de_param;
+lista_de_param : tipo clase_par lista_de_ident
+                {
+                  codigo.anadirParametros(*$3, *$2, *$1);
+                }
+                resto_lis_de_param;
 
-clase_par : TVAL
-      | TLESSEQ
-      | TREF
-      ;
+clase_par : TLESSEQ {$$ = $1;}
+            | TREF  {$$ = $1;}
+            ;
 
-resto_lis_de_param : TSEMIC tipo clase_par lista_de_ident resto_lis_de_param
-      | %empty
-      ;
+resto_lis_de_param : TSEMIC tipo clase_par lista_de_ident
+                    {
+                      codigo.anadirParametros(*$4, *$3, *$2);
+                    }
+                    resto_lis_de_param
+                    | %empty
+                    ;
 
 lista_de_sentencias : lista_de_sentencias sentencia 
-      | %empty
-      ;
+                      {
+                        $$ = unir(*$1, *$2);
+                      }
+                      | %empty
+                      {
+                        $$ = new vector<int>;
+                      }
+                      ;
 
 sentencia :  variable TASSIG expresion TSEMIC
       { 
-        //Falta inicializar el atributo de stmt
+        codigo.anadirInstruccion(*$1 + *$2 + $3->str + ";") ; 
+        delete $1 ; delete $3;
         $$ = new vector<int>;
       }
-      | RIF expresion TLBRACE lista_de_sentencias TRBRACE TSEMIC
+      | RIF expresion M TLBRACE lista_de_sentencias TRBRACE M TSEMIC
+      { 
+        codigo.completarInstrucciones($2->trues, $3);
+        codigo.completarInstrucciones($2->falses, $7);
+        $$ = $5;
+      }
       | RIF expresion TLBRACE lista_de_sentencias TRBRACE RELSE TLBRACE lista_de_sentencias TRBRACE TSEMIC
+      { 
+        $$ = new vector<int>;
+      }
       | RWHILE RFOREVER TLBRACE lista_de_sentencias TRBRACE TSEMIC
+      { 
+        $$ = new vector<int>;
+      }
       | RDO TLBRACE lista_de_sentencias TRBRACE RUNTIL expresion RELSE TLBRACE lista_de_sentencias TRBRACE TSEMIC
+      { 
+        $$ = new vector<int>;
+      }
       | RENDREPEAT RIF expresion TSEMIC
-      | RENDPROGRAM TSEMIC
+      { 
+        $$ = new vector<int>;
+      }
+      | REXIT TSEMIC
+      { 
+        $$ = new vector<int>;
+      }
       | RREAD TLPAREN expresion TRPAREN TSEMIC
+      { 
+        $$ = new vector<int>;
+      }
       | RPRINTLN TLPAREN expresion TRPAREN TSEMIC
+      { 
+        $$ = new vector<int>;
+      }
       | TCOMMENT
-      | declaraciones
-      | decl_de_subprogs
+      { 
+        $$ = new vector<int>;
+      }
       ;
 
-variable : TIDENTIFIER;
+variable : TIDENTIFIER
+          {$$ = $1;}
+          ;
 
 expresion : expresion TEQUAL expresion
+      { 
+      $$ = new expresionstruct;
+      *$$ = makecomparison($1->str,*$2,$3->str) ; 
+      delete $1; delete $3;
+      }
       | expresion TGREATER expresion
+      { 
+      $$ = new expresionstruct;
+      *$$ = makecomparison($1->str,*$2,$3->str) ; 
+      delete $1; delete $3;
+      }
       | expresion TLESS expresion
+      { 
+      $$ = new expresionstruct;
+      *$$ = makecomparison($1->str,*$2,$3->str) ; 
+      delete $1; delete $3;
+      }
       | expresion TGREATEREQ expresion
+      { 
+      $$ = new expresionstruct;
+      *$$ = makecomparison($1->str,*$2,$3->str) ; 
+      delete $1; delete $3;
+      }
       | expresion TLESSEQ expresion
+      { 
+      $$ = new expresionstruct;
+      *$$ = makecomparison($1->str,*$2,$3->str) ; 
+      delete $1; delete $3;
+      }
       | expresion TNOTEQ expresion
-      | expresion TPLUS expresion
+      { 
+      $$ = new expresionstruct;
+      *$$ = makecomparison($1->str,*$2,$3->str) ; 
+      delete $1; delete $3;
+      }
+      | expresion TPLUS expresion 
+      { 
+        $$ = new expresionstruct;
+        *$$ = makearithmetic($1->str,*$2,$3->str) ;
+        delete $1; delete $3; 
+      }
       | expresion TMINUS expresion
+      { 
+        $$ = new expresionstruct;
+        *$$ = makearithmetic($1->str,*$2,$3->str) ;
+        delete $1; delete $3; 
+      }
       | expresion TMUL expresion
+      { 
+        $$ = new expresionstruct;
+        *$$ = makearithmetic($1->str,*$2,$3->str) ;
+        delete $1; delete $3; 
+      }
       | expresion TDIV expresion
+      { 
+        $$ = new expresionstruct;
+        *$$ = makearithmetic($1->str,*$2,$3->str) ;
+        delete $1; delete $3; 
+      }
       | variable
+      { $$ = new expresionstruct; $$->str = *$1; }
       | TINTEGER
+      { $$ = new expresionstruct; $$->str = *$1; }
       | TDOUBLE
+      { $$ = new expresionstruct; $$->str = *$1; }
       | TLPAREN expresion TRPAREN
+      { $$ = new expresionstruct;}
       ;
 
 M: %empty { $$ = codigo.obtenRef() ; }

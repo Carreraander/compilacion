@@ -65,29 +65,30 @@ extern int yydebug;
     ROUT = 271,
     RREAD = 272,
     RPRINTLN = 273,
-    TMUL = 274,
-    TDIV = 275,
-    TPLUS = 276,
-    TMINUS = 277,
-    TASSIG = 278,
-    TSEMIC = 279,
-    TLBRACE = 280,
-    TRBRACE = 281,
-    TCOMMA = 282,
-    TLPAREN = 283,
-    TRPAREN = 284,
-    TEQUAL = 285,
-    TNOTEQ = 286,
-    TLESS = 287,
-    TLESSEQ = 288,
-    TGREATER = 289,
-    TGREATEREQ = 290,
-    TVAL = 291,
-    TREF = 292,
-    TINTEGER = 293,
-    TDOUBLE = 294,
-    TIDENTIFIER = 295,
-    TCOMMENT = 296
+    REXIT = 274,
+    TMUL = 275,
+    TDIV = 276,
+    TPLUS = 277,
+    TMINUS = 278,
+    TASSIG = 279,
+    TSEMIC = 280,
+    TLBRACE = 281,
+    TRBRACE = 282,
+    TCOMMA = 283,
+    TLPAREN = 284,
+    TRPAREN = 285,
+    TEQUAL = 286,
+    TNOTEQ = 287,
+    TLESS = 288,
+    TLESSEQ = 289,
+    TGREATER = 290,
+    TGREATEREQ = 291,
+    TVAL = 292,
+    TREF = 293,
+    TINTEGER = 294,
+    TDOUBLE = 295,
+    TIDENTIFIER = 296,
+    TCOMMENT = 297
   };
 #endif
 
@@ -103,7 +104,7 @@ union YYSTYPE
     int number ;
     vector<int> *numlist;
 
-#line 107 "parser.hpp"
+#line 108 "parser.hpp"
 
 };
 typedef union YYSTYPE YYSTYPE;

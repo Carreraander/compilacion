@@ -59,9 +59,9 @@ void Codigo::anadirDeclaraciones(const vector<string> &idNombres, const string &
 
 void Codigo::anadirParametros(const vector<string> &idNombres, const string &pTipo, const string &tipoNombre) {  //, string procedimiento){
   string pTipoAux ;
-  if      (pTipo == "in") pTipoAux = "val" ;
-  else if (pTipo == "out") pTipoAux = "ref" ;
-  else if (pTipo == "in out") pTipoAux = "ref" ;
+  if      (pTipo == "<=") pTipoAux = "val" ;
+  else if (pTipo == "=>") pTipoAux = "ref" ;
+  else if (pTipo == "<=>") pTipoAux = "ref" ;
   vector<string>::const_iterator iter;
   for (iter=idNombres.begin(); iter!=idNombres.end(); iter++) {
     anadirInstruccion(pTipoAux + "_" + tipoNombre + " " + *iter + ";");
