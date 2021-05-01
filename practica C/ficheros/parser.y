@@ -172,7 +172,7 @@ lista_de_sentencias : lista_de_sentencias sentencia
 
 sentencia :  variable TASSIG expresion TSEMIC
       { 
-        codigo.anadirInstruccion(*$1 + *$2 + $3->str + ";") ; 
+        codigo.anadirInstruccion(*$1 + " := " + $3->str + ";") ; 
         delete $1 ; delete $3;
         $$ = new vector<int>;
       }
@@ -182,25 +182,37 @@ sentencia :  variable TASSIG expresion TSEMIC
         codigo.completarInstrucciones($2->falses, $7);
         $$ = $5;
       }
-      | RIF expresion TLBRACE lista_de_sentencias TRBRACE RELSE TLBRACE lista_de_sentencias TRBRACE TSEMIC
-      { 
+      | RWHILE RFOREVER TLBRACE M lista_de_sentencias M TRBRACE TSEMIC
+      {
         $$ = new vector<int>;
+        $$->push_back(codigo.obtenRef());
+        codigo.anadirInstruccion("goto");
+        codigo.completarInstrucciones(*$$, $4);
+        $$ = $5;
       }
-      | RWHILE RFOREVER TLBRACE lista_de_sentencias TRBRACE TSEMIC
+      | RDO TLBRACE M lista_de_sentencias TRBRACE RUNTIL M expresion RELSE M TLBRACE 
+      lista_de_sentencias TRBRACE M TSEMIC
       { 
         $$ = new vector<int>;
+        codigo.completarInstrucciones($8->falses, $3);
+        codigo.completarInstrucciones($8->trues, $10);
+        $$ = unir(*$4, *$12);
+        //EXIT
+        codigo.completarInstrucciones(*$4, $10);
+        codigo.completarInstrucciones(*$12, $14);
+        //FALTA EL SKIP
       }
-      | RDO TLBRACE lista_de_sentencias TRBRACE RUNTIL expresion RELSE TLBRACE lista_de_sentencias TRBRACE TSEMIC
+      | RENDREPEAT RIF expresion M TSEMIC
       { 
-        $$ = new vector<int>;
-      }
-      | RENDREPEAT RIF expresion TSEMIC
-      { 
-        $$ = new vector<int>;
+        codigo.completarInstrucciones($3->falses, $4);
+        *$$ = $3->trues;
+        delete $3;
       }
       | REXIT TSEMIC
-      { 
+      {
         $$ = new vector<int>;
+        $$->push_back(codigo.obtenRef());
+        codigo.anadirInstruccion("goto");
       }
       | RREAD TLPAREN expresion TRPAREN TSEMIC
       { 

@@ -3,8 +3,29 @@ program ejemplo_con_nombre_muy_largo
 	int a, b, c;
   float d, e;
   proc sumar ( int <= x; int <= y; int <=> resul)   
-    int aux, iteraciones;
+    int aux, iteraciones, variable_en_bucle;
     {
+      aux = x;
+      resul = y;
+      if resul < 1000  { 
+        iteraciones = 0;
+        while forever {
+          variable_en_bucle = 1;
+        };
+        do{
+           resul = resul + 1;
+           aux = aux - 1;
+           iteraciones = iteraciones + 1;
+           exit;
+        } until aux == 0
+        else{
+          if resul < 0 {
+            iteraciones = iteraciones + 2;
+          };
+
+        };
+
+      };  
     }
 {
   
