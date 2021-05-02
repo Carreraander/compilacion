@@ -102,7 +102,7 @@ union YYSTYPE
     vector<string> *list ;
     expresionstruct *expr ;
     int number ;
-    vector<int> *numlist;
+    numliststruct *numlist;
 
 #line 108 "parser.hpp"
 

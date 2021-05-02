@@ -1028,7 +1028,7 @@ TOKEN(RPRINTLN);
 case 34:
 YY_RULE_SETUP
 #line 67 "tokens.l"
-TOKEN(TCOMMENT);										
+TOKEN(TCOMMENT);{}									
 	YY_BREAK
 case 35:
 /* rule 35 can match eol */
@@ -1040,7 +1040,7 @@ case 36:
 /* rule 36 can match eol */
 YY_RULE_SETUP
 #line 71 "tokens.l"
-TOKEN(TCOMMENT) ;
+TOKEN(TCOMMENT)  ; {}
 	YY_BREAK
 case 37:
 YY_RULE_SETUP

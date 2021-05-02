@@ -64,11 +64,11 @@ exit					TOKEN(REXIT);
 read                    TOKEN(RREAD);
 println                 TOKEN(RPRINTLN);
 
-"#"[^\n]*				TOKEN(TCOMMENT);										
+"#"[^\n]*				TOKEN(TCOMMENT);{}									
 
 [ \t\n]                 ;
 
-\[\*(([^\*]\])*[^\]]*)*\*\]					TOKEN(TCOMMENT) ;
+\[\*(([^\*]\])*[^\]]*)*\*\]					TOKEN(TCOMMENT)  ; {}
 [a-zA-Z]+(_[a-zA-Z0-9]|[a-zA-Z0-9])*    	TOKEN(TIDENTIFIER) ; 
 [0-9]+\.[0-9]*((e|E)(\+|\-)?)?[0-9]+          TOKEN(TDOUBLE);
 [0-9]+                  					TOKEN(TINTEGER); 

@@ -47,8 +47,8 @@ void Codigo::anadirInstruccion(const string &instruccion) {
 /***********************/
 
 void Codigo::anadirDeclaraciones(const vector<string> &idNombres, const string &tipoNombre) {
-  vector<string>::const_iterator iter;
-  for (iter=idNombres.begin(); iter!=idNombres.end(); iter++) {
+  vector<string>::const_reverse_iterator iter;
+  for (iter=idNombres.rbegin(); iter!=idNombres.rend(); ++iter) {
     anadirInstruccion(tipoNombre + " " + *iter + ";");
   }
 }

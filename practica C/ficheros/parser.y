@@ -36,7 +36,7 @@
     vector<string> *list ;
     expresionstruct *expr ;
     int number ;
-    vector<int> *numlist;
+    numliststruct *numlist;
 }
 
 /* 
@@ -162,11 +162,13 @@ resto_lis_de_param : TSEMIC tipo clase_par lista_de_ident
 
 lista_de_sentencias : lista_de_sentencias sentencia 
                       {
-                        $$ = unir(*$1, *$2);
+                        $$ = new numliststruct;
+                        $$->exit = *(unir($2->exit, $1->exit));
+                        $$->skip = *(unir($2->skip, $1->skip));
                       }
                       | %empty
                       {
-                        $$ = new vector<int>;
+                        $$ = new numliststruct;
                       }
                       ;
 
@@ -174,57 +176,65 @@ sentencia :  variable TASSIG expresion TSEMIC
       { 
         codigo.anadirInstruccion(*$1 + " := " + $3->str + ";") ; 
         delete $1 ; delete $3;
-        $$ = new vector<int>;
+        $$ = new numliststruct;
       }
       | RIF expresion M TLBRACE lista_de_sentencias TRBRACE M TSEMIC
       { 
         codigo.completarInstrucciones($2->trues, $3);
         codigo.completarInstrucciones($2->falses, $7);
-        $$ = $5;
+        //EXIT
+        $$->exit = $5->exit;
       }
       | RWHILE RFOREVER TLBRACE M lista_de_sentencias M TRBRACE TSEMIC
       {
-        $$ = new vector<int>;
-        $$->push_back(codigo.obtenRef());
-        codigo.anadirInstruccion("goto");
-        codigo.completarInstrucciones(*$$, $4);
-        $$ = $5;
+        $$ = new numliststruct;
+        stringstream cadena;
+        cadena << " " << $4;
+        codigo.anadirInstruccion("goto" + cadena.str() + ";");
+        //EXIT
+        codigo.completarInstrucciones($5->exit, $6);
+        $$->exit = $5->exit;
       }
       | RDO TLBRACE M lista_de_sentencias TRBRACE RUNTIL M expresion RELSE M TLBRACE 
       lista_de_sentencias TRBRACE M TSEMIC
       { 
-        $$ = new vector<int>;
+        $$ = new numliststruct;
         codigo.completarInstrucciones($8->falses, $3);
         codigo.completarInstrucciones($8->trues, $10);
-        $$ = unir(*$4, *$12);
+        $$->exit = *(unir($4->exit, $12->exit));
         //EXIT
-        codigo.completarInstrucciones(*$4, $10);
-        codigo.completarInstrucciones(*$12, $14);
+        codigo.completarInstrucciones($4->exit, $10);
+        codigo.completarInstrucciones($12->exit, $14);
         //FALTA EL SKIP
+        codigo.completarInstrucciones($4->skip, $7);
       }
       | RENDREPEAT RIF expresion M TSEMIC
       { 
+        $$ = new numliststruct;
         codigo.completarInstrucciones($3->falses, $4);
-        *$$ = $3->trues;
+        $$->skip = $3->trues;
         delete $3;
       }
       | REXIT TSEMIC
       {
-        $$ = new vector<int>;
-        $$->push_back(codigo.obtenRef());
+        $$ = new numliststruct;
+        $$->exit.push_back(codigo.obtenRef());
         codigo.anadirInstruccion("goto");
       }
       | RREAD TLPAREN expresion TRPAREN TSEMIC
       { 
-        $$ = new vector<int>;
+        $$ = new numliststruct;
+        codigo.anadirInstruccion("read " + $3->str + ";");
       }
       | RPRINTLN TLPAREN expresion TRPAREN TSEMIC
       { 
-        $$ = new vector<int>;
+        $$ = new numliststruct;
+        codigo.anadirInstruccion("write " + $3->str + ";");
+        codigo.anadirInstruccion("writeln;");
       }
       | TCOMMENT
       { 
-        $$ = new vector<int>;
+        $$ = new numliststruct;
       }
       ;
 
@@ -299,14 +309,14 @@ expresion : expresion TEQUAL expresion
       | TDOUBLE
       { $$ = new expresionstruct; $$->str = *$1; }
       | TLPAREN expresion TRPAREN
-      { $$ = new expresionstruct;}
+      { $$ = new expresionstruct; $$->str = $2->str; }
       ;
 
 M: %empty { $$ = codigo.obtenRef() ; }
   ;
 
 N: %empty {
-  $$ = new vector<int>; 
+  $$ = new numliststruct; 
         vector<int> tmp1 ; tmp1.push_back(codigo.obtenRef()) ;
   *$$ = tmp1;
   codigo.anadirInstruccion("goto");}

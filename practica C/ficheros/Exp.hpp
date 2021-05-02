@@ -8,4 +8,10 @@ struct expresionstruct {
   vector<int> falses ;
 };
 
+struct numliststruct {
+  vector<int> exit;
+  vector<int> skip;
+};
+
+
 #endif /* EXP_HPP_ */
