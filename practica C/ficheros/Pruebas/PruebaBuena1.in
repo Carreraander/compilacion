@@ -1,34 +1,33 @@
-program ejemplo_con_nombre_muy_largo {
-
-	int a, b, c ;
-	float d, e ;
-	[* esto es un **
- 	comentario multilinea *]
- 	proc suma(int <= x; int <= y){
- 		int aux, iteraciones;
- 		aux = x;
- 		resul = y;
- 		if resul < 1000 {
- 			iteracion = 0;
- 			do{
- 				resul = resul + 1;
-        	skip if resul > 1000000;
- 				aux = aux - 1;
- 				iteraciones = iteraciones + 1;
- 			}until aux == 0
-			 else { aux = 1;};
- 		}else{
- 			if resul < 0{
- 				exit;
- 			};
- 			println(iteraciones);
- 		};
- 	}
- 	read(a); read(b);
-   	d = 1/b;
-   	e = 0.1e-1/a;
-   	[* suma(a,b,c); esto solo para aquellos que 
-                   traten llamadas a procedimientos *]
-   	c = c*(c*d)+e;
-   	println(c*c);
-}
+program ejemplo 
+  int a,b,c; [*comentario*]
+  float [*comentario*] d,e ;
+  [*comentario*] proc sumar ( int <= x; int <= y; int <=> resul)  [*comentario
+  multilinea*] 
+    int aux, iteraciones;
+    {
+      aux = x;
+      resul = y;  
+      if resul < 1000 { 
+        iteraciones = 0;  
+        do {  
+          resul = [*comentario*] resul + 1;
+          skip if resul > 1000000;
+          aux = aux - 1;
+          iteraciones = iteraciones + 1; 
+        } until  aux == 0 
+        else {
+          if resul < 0 {
+              exit;
+          };
+          println(iteraciones);
+        };  #fin del do  
+      }; #fin del if
+    } #fin del proc
+  { 
+    read(a); 
+    read(b);
+    d= 1/b; [*comentario 
+    multilinea*]
+    c= c*(c*d)+e;
+    println(c);
+  }

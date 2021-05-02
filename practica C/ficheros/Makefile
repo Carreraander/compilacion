@@ -16,5 +16,9 @@ parser: $(FUENTES) Codigo.hpp Exp.hpp
 	g++ $(CFLAGS) -o $@ $(FUENTES) 
 
 prueba: parser ./Pruebas
-	./parser <./Pruebas/pruebapequena.in
+	./parser <./Pruebas/PruebaBuena1.in
+	./parser <./Pruebas/PruebaBuena2.in
+	./parser <./Pruebas/PruebaMala1.in
+	./parser <./Pruebas/PruebaMala2.in
+	./parser <./Pruebas/PruebaMala3.in
 

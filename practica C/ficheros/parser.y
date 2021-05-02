@@ -69,7 +69,6 @@
 %type <str> variable
 %type <expr> expresion
 %type <number> M
-%type <numlist> N
 %type <numlist> lista_de_sentencias
 %type <numlist> sentencia
 
@@ -96,6 +95,8 @@ declaraciones :  tipo lista_de_ident TSEMIC
                 codigo.anadirDeclaraciones(*$2, *$1);
               }
       declaraciones
+      | TCOMMENT declaraciones
+      | declaraciones TCOMMENT
       | %empty
       ;
 
@@ -105,6 +106,7 @@ lista_de_ident : TIDENTIFIER resto_lista_id
       $2->push_back(*$1);
       $$ = $2;
       }
+      | lista_de_ident TCOMMENT
       ;
 
 resto_lista_id : TCOMMA TIDENTIFIER resto_lista_id
@@ -118,14 +120,19 @@ resto_lista_id : TCOMMA TIDENTIFIER resto_lista_id
       $$ = new vector<string>;
       *$$ = {};
       }
+      | resto_lista_id TCOMMENT
       ;
 
 tipo : RINTEGER {*$$ = "ent";}
       | RFLOAT {*$$ = "real";}
+      | TCOMMENT tipo
+      | tipo TCOMMENT
       ;
 
 decl_de_subprogs : decl_de_subprograma decl_de_subprogs
       | %empty
+      | TCOMMENT decl_de_subprogs
+      | decl_de_subprogs TCOMMENT
       ;
 
 decl_de_subprograma : RPROCEDURE TIDENTIFIER 
@@ -140,6 +147,8 @@ decl_de_subprograma : RPROCEDURE TIDENTIFIER
 
 argumentos : TLPAREN lista_de_param TRPAREN
       | %empty
+      | TCOMMENT argumentos
+      | argumentos TCOMMENT
       ;
 
 lista_de_param : tipo clase_par lista_de_ident
@@ -147,9 +156,14 @@ lista_de_param : tipo clase_par lista_de_ident
                   codigo.anadirParametros(*$3, *$2, *$1);
                 }
                 resto_lis_de_param;
+                | TCOMMENT lista_de_param
+                | lista_de_param TCOMMENT
+                ;
 
 clase_par : TLESSEQ {$$ = $1;}
             | TREF  {$$ = $1;}
+            | TCOMMENT clase_par
+            | clase_par TCOMMENT
             ;
 
 resto_lis_de_param : TSEMIC tipo clase_par lista_de_ident
@@ -157,6 +171,8 @@ resto_lis_de_param : TSEMIC tipo clase_par lista_de_ident
                       codigo.anadirParametros(*$4, *$3, *$2);
                     }
                     resto_lis_de_param
+                    | TCOMMENT resto_lis_de_param
+                    | resto_lis_de_param TCOMMENT
                     | %empty
                     ;
 
@@ -170,6 +186,7 @@ lista_de_sentencias : lista_de_sentencias sentencia
                       {
                         $$ = new numliststruct;
                       }
+                      | lista_de_sentencias TCOMMENT
                       ;
 
 sentencia :  variable TASSIG expresion TSEMIC
@@ -232,7 +249,7 @@ sentencia :  variable TASSIG expresion TSEMIC
         codigo.anadirInstruccion("write " + $3->str + ";");
         codigo.anadirInstruccion("writeln;");
       }
-      | TCOMMENT
+      | sentencia TCOMMENT
       { 
         $$ = new numliststruct;
       }
@@ -240,6 +257,8 @@ sentencia :  variable TASSIG expresion TSEMIC
 
 variable : TIDENTIFIER
           {$$ = $1;}
+          | TCOMMENT variable
+          | variable TCOMMENT
           ;
 
 expresion : expresion TEQUAL expresion
@@ -310,17 +329,11 @@ expresion : expresion TEQUAL expresion
       { $$ = new expresionstruct; $$->str = *$1; }
       | TLPAREN expresion TRPAREN
       { $$ = new expresionstruct; $$->str = $2->str; }
+      | expresion TCOMMENT
       ;
 
 M: %empty { $$ = codigo.obtenRef() ; }
   ;
-
-N: %empty {
-  $$ = new numliststruct; 
-        vector<int> tmp1 ; tmp1.push_back(codigo.obtenRef()) ;
-  *$$ = tmp1;
-  codigo.anadirInstruccion("goto");}
-        ;
 
 %%
 
