@@ -10,9 +10,6 @@
    extern int yylex();
    extern int yylineno;
    extern char *yytext;
-   void yyerror (const char *msg) {
-     printf("line %d: %s at '%s'\n", yylineno, msg, yytext) ;
-   }
 
    #include "Codigo.hpp"
    #include "Exp.hpp"
@@ -23,8 +20,13 @@
 
    vector<int> *unir(vector<int> lis1, vector<int> lis2);
 
-
    Codigo codigo;
+
+   void yyerror (const char *msg) {
+    stringstream cadena;
+    cadena << "line " << yylineno << ": " << msg << " at " << yytext;
+    codigo.anadirError(cadena.str());
+   }
 
 %}
 
@@ -97,6 +99,7 @@ declaraciones :  tipo lista_de_ident TSEMIC
       declaraciones
       | TCOMMENT declaraciones
       | declaraciones TCOMMENT
+      | error declaraciones
       | %empty
       ;
 
@@ -133,6 +136,7 @@ decl_de_subprogs : decl_de_subprograma decl_de_subprogs
       | %empty
       | TCOMMENT decl_de_subprogs
       | decl_de_subprogs TCOMMENT
+      | error decl_de_subprogs
       ;
 
 decl_de_subprograma : RPROCEDURE TIDENTIFIER 
@@ -143,12 +147,17 @@ decl_de_subprograma : RPROCEDURE TIDENTIFIER
                     {
                       codigo.anadirInstruccion("endproc;");
                     }
+                    | error argumentos declaraciones decl_de_subprogs TLBRACE lista_de_sentencias TRBRACE
+                    {
+                      codigo.anadirInstruccion("endproc;");
+                    }
                     ;
 
 argumentos : TLPAREN lista_de_param TRPAREN
       | %empty
       | TCOMMENT argumentos
       | argumentos TCOMMENT
+      | error argumentos
       ;
 
 lista_de_param : tipo clase_par lista_de_ident
@@ -158,6 +167,7 @@ lista_de_param : tipo clase_par lista_de_ident
                 resto_lis_de_param;
                 | TCOMMENT lista_de_param
                 | lista_de_param TCOMMENT
+                | error resto_lis_de_param
                 ;
 
 clase_par : TLESSEQ {$$ = $1;}
@@ -174,6 +184,7 @@ resto_lis_de_param : TSEMIC tipo clase_par lista_de_ident
                     | TCOMMENT resto_lis_de_param
                     | resto_lis_de_param TCOMMENT
                     | %empty
+                    | error resto_lis_de_param
                     ;
 
 lista_de_sentencias : lista_de_sentencias sentencia 
@@ -187,6 +198,7 @@ lista_de_sentencias : lista_de_sentencias sentencia
                         $$ = new numliststruct;
                       }
                       | lista_de_sentencias TCOMMENT
+                      | error lista_de_sentencias
                       ;
 
 sentencia :  variable TASSIG expresion TSEMIC

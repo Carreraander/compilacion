@@ -1,7 +1,7 @@
 program ejemplo 
   int a,b,c; [*comentario*]
   float [*comentario*] d,e ;
-  [*comentario*] proc sumar ( int <= x; int <= y; int <=> resul)  [*comentario
+  proc sumar ( int <= x; int <= y; int <=> resul)  [*comentario
   multilinea*] 
     int aux, iteraciones;
     {
@@ -10,7 +10,7 @@ program ejemplo
       if resul < 1000 { 
         iteraciones = 0;  
         do {  
-          resul = [*comentario*] resul + 1;
+          resul = resul + 1;
           skip if resul > 1000000;
           aux = aux - 1;
           iteraciones = iteraciones + 1; 

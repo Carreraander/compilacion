@@ -41,6 +41,9 @@ public:
 	/* Añade una nueva instrucción a la estructura. */
 	void anadirInstruccion(const std::string &instruccion);
 
+	/* Muestra por pantalla el mensaje de error */
+	void anadirError(const std::string &error);
+
 	/* Dada una lista de variables y su tipo, crea y añade las instrucciones de declaración */
 	void anadirDeclaraciones(const std::vector<std::string> &idNombres, const std::string &tipoNombre);
 

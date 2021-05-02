@@ -42,6 +42,16 @@ void Codigo::anadirInstruccion(const string &instruccion) {
   instrucciones.push_back(cadena.str());
 }
 
+/*********************/
+/* anadirError */
+/*********************/
+
+void Codigo::anadirError(const string &error) {
+  stringstream cadena;
+  cadena << error;
+  instrucciones.push_back(cadena.str());
+}
+
 /***********************/
 /* anadirDeclaraciones */
 /***********************/
