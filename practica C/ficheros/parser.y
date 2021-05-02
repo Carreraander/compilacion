@@ -250,10 +250,10 @@ sentencia :  variable TASSIG expresion TSEMIC
         $$->exit.push_back(codigo.obtenRef());
         codigo.anadirInstruccion("goto");
       }
-      | RREAD TLPAREN expresion TRPAREN TSEMIC
+      | RREAD TLPAREN variable TRPAREN TSEMIC
       { 
         $$ = new numliststruct;
-        codigo.anadirInstruccion("read " + $3->str + ";");
+        codigo.anadirInstruccion("read " + *$3 + ";");
       }
       | RPRINTLN TLPAREN expresion TRPAREN TSEMIC
       { 

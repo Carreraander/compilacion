@@ -29,8 +29,8 @@ program ejemplo_con_nombre_muy_largo
       };					
   	}		
 	{
-    read(a*d*d/f);
-    read(b+f+s/g);
+    read(a);
+    read(b);
     d = 1/b;
     e = 0.1e-1/a;
     c = c*(c*d)+e;
