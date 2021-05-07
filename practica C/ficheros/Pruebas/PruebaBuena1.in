@@ -1,13 +1,13 @@
 program ejemplo 
   int a,b,c; [*comentario*]
-  int a[];
+  int a[j+q],b[a+b],c[43];
   float [*comentario*] d,e ;
   proc sumar ( int <= x; int <= y; int <=> resul)  [*comentario
   multilinea*] 
     int aux, iteraciones;
     {
       aux = x;
-      resul = y;  
+      resul = k;  
       if resul < 1000 { 
         iteraciones = 0;  
         do {  
@@ -17,7 +17,7 @@ program ejemplo
           iteraciones = iteraciones + 1; 
         } until  aux == 0 
         else {
-          if A[i] < 0 {
+          if a[i] < 0 {
               exit;
           };
           println(iteraciones);

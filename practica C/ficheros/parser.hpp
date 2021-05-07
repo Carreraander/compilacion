@@ -77,19 +77,20 @@ extern int yydebug;
     TCOMMA = 283,
     TLPAREN = 284,
     TRPAREN = 285,
-    TEQUAL = 286,
-    TNOTEQ = 287,
-    TLESS = 288,
-    TLESSEQ = 289,
-    TGREATER = 290,
-    TGREATEREQ = 291,
-    TVAL = 292,
-    TREF = 293,
-    TINTEGER = 294,
-    TDOUBLE = 295,
-    TIDENTIFIER = 296,
-    TARRAY = 297,
-    TCOMMENT = 298
+    TRCOR = 286,
+    TLCOR = 287,
+    TEQUAL = 288,
+    TNOTEQ = 289,
+    TLESS = 290,
+    TLESSEQ = 291,
+    TGREATER = 292,
+    TGREATEREQ = 293,
+    TVAL = 294,
+    TREF = 295,
+    TINTEGER = 296,
+    TDOUBLE = 297,
+    TIDENTIFIER = 298,
+    TCOMMENT = 299
   };
 #endif
 
@@ -105,7 +106,7 @@ union YYSTYPE
     int number ;
     numliststruct *numlist;
 
-#line 109 "parser.hpp"
+#line 110 "parser.hpp"
 
 };
 typedef union YYSTYPE YYSTYPE;

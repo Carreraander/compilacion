@@ -39,9 +39,9 @@ proc 					TOKEN(RPROCEDURE);
 
 ")"						TOKEN(TRPAREN);
 
-"["                     TOKEN(TRCOR);
+"["                     TOKEN(TLCOR);
 
-"]"                     TOKEN(TLCOR);
+"]"                     TOKEN(TRCOR);
 
 
 "=="					TOKEN(TEQUAL);
@@ -54,7 +54,6 @@ proc 					TOKEN(RPROCEDURE);
 "=>"					TOKEN(TREF);
 "<=>"					TOKEN(TREF);
 
-arr                     TOKEN(RARRAY);
 int						TOKEN(RINTEGER);
 float					TOKEN(RFLOAT);
 if 						TOKEN(RIF);

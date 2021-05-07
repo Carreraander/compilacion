@@ -49,7 +49,7 @@
 %token <str> TSEMIC TLBRACE TRBRACE TCOMMA TLPAREN TRPAREN TRCOR TLCOR
 %token <str> TEQUAL TNOTEQ TLESS TLESSEQ TGREATER TGREATEREQ
 %token <str> TVAL TREF
-%token <str> TINTEGER TDOUBLE TIDENTIFIER RARRAY TCOMMENT
+%token <str> TINTEGER TDOUBLE TIDENTIFIER TCOMMENT
 
 
 /* 
@@ -110,7 +110,18 @@ lista_de_ident : TIDENTIFIER resto_lista_id
       $2->push_back(*$1);
       $$ = $2;
       }
-      | TIDENTIFIER TRCOR expresion TLCOR resto_lista_id
+      | TIDENTIFIER TLCOR expresion TRCOR resto_lista_id
+      {
+      $$ = new vector<string>;
+      $5->push_back(*$1 + *$2 + $3->str + *$4);
+      $$ = $5;
+      }
+      | TIDENTIFIER TLCOR TRCOR resto_lista_id
+      {
+      $$ = new vector<string>;
+      $4->push_back(*$1 + *$2 + *$3);
+      $$ = $4;
+      }
       | lista_de_ident TCOMMENT
       ;
 
@@ -120,7 +131,18 @@ resto_lista_id : TCOMMA TIDENTIFIER resto_lista_id
       $3->push_back(*$2);
       $$ = $3;
       }
-      | TCOMMA TIDENTIFIER TRCOR expresion TLCOR resto_lista_id
+      | TCOMMA TIDENTIFIER TLCOR expresion TRCOR resto_lista_id
+      {
+      $$ = new vector<string>;
+      $6->push_back(*$2 + *$3 + $4->str + *$5);
+      $$ = $6 ;
+      }
+      | TCOMMA TIDENTIFIER TLCOR TRCOR resto_lista_id
+      {
+      $$ = new vector<string>;
+      $5->push_back(*$1 + *$3 + *$4);
+      $$ = $5;
+      }
       | %empty
       {
       $$ = new vector<string>;
@@ -139,8 +161,6 @@ array_id : expresion array_id
       | expresion
       ;
 
-array : TIDENTIFIER TLCOR array_id TRCOR 
-      ;
 
 decl_de_subprogs : decl_de_subprograma decl_de_subprogs
       | %empty
@@ -353,6 +373,8 @@ expresion : expresion TEQUAL expresion
       { $$ = new expresionstruct; $$->str = *$1; }
       | TLPAREN expresion TRPAREN
       { $$ = new expresionstruct; $$->str = $2->str; }
+      | variable TLCOR expresion TRCOR
+      { $$ = new expresionstruct; $$->str = *$1 + *$2 + $3->str + *$4; }
       | expresion TCOMMENT
       ;
 
