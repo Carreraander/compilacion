@@ -46,10 +46,10 @@
 */
 %token <str> RINTEGER RFLOAT RIF RELSE RDO RWHILE RFOREVER RENDREPEAT RUNTIL RENDPROGRAM RPROGRAM RPROCEDURE RIN ROUT RREAD RPRINTLN REXIT
 %token <str> TMUL TDIV TPLUS TMINUS TASSIG 
-%token <str> TSEMIC TLBRACE TRBRACE TCOMMA TLPAREN TRPAREN
+%token <str> TSEMIC TLBRACE TRBRACE TCOMMA TLPAREN TRPAREN TRCOR TLCOR
 %token <str> TEQUAL TNOTEQ TLESS TLESSEQ TGREATER TGREATEREQ
 %token <str> TVAL TREF
-%token <str> TINTEGER TDOUBLE TIDENTIFIER TCOMMENT
+%token <str> TINTEGER TDOUBLE TIDENTIFIER RARRAY TCOMMENT
 
 
 /* 
@@ -102,13 +102,15 @@ declaraciones :  tipo lista_de_ident TSEMIC
       | error declaraciones
       | %empty
       ;
-
+//TODO: ARREGLAR LISTA DE IDENTIFICADORES PARA AÑADIR ARRAYS
+// int ander[],juan[],pedro[];
 lista_de_ident : TIDENTIFIER resto_lista_id
       {
       $$ = new vector<string>;
       $2->push_back(*$1);
       $$ = $2;
       }
+      | TIDENTIFIER TRCOR expresion TLCOR resto_lista_id
       | lista_de_ident TCOMMENT
       ;
 
@@ -118,6 +120,7 @@ resto_lista_id : TCOMMA TIDENTIFIER resto_lista_id
       $3->push_back(*$2);
       $$ = $3;
       }
+      | TCOMMA TIDENTIFIER TRCOR expresion TLCOR resto_lista_id
       | %empty
       {
       $$ = new vector<string>;
@@ -130,6 +133,13 @@ tipo : RINTEGER {*$$ = "ent";}
       | RFLOAT {*$$ = "real";}
       | TCOMMENT tipo
       | tipo TCOMMENT
+      ;
+
+array_id : expresion array_id 
+      | expresion
+      ;
+
+array : TIDENTIFIER TLCOR array_id TRCOR 
       ;
 
 decl_de_subprogs : decl_de_subprograma decl_de_subprogs
@@ -265,12 +275,14 @@ sentencia :  variable TASSIG expresion TSEMIC
       { 
         $$ = new numliststruct;
       }
+      // TODO: Dificultad del array: identificar el id que contiene dentro para poder ir recorriendolo
       ;
 
 variable : TIDENTIFIER
           {$$ = $1;}
           | TCOMMENT variable
           | variable TCOMMENT
+          
           ;
 
 expresion : expresion TEQUAL expresion

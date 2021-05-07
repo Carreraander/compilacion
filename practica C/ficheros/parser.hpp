@@ -88,7 +88,8 @@ extern int yydebug;
     TINTEGER = 294,
     TDOUBLE = 295,
     TIDENTIFIER = 296,
-    TCOMMENT = 297
+    TARRAY = 297,
+    TCOMMENT = 298
   };
 #endif
 
@@ -104,7 +105,7 @@ union YYSTYPE
     int number ;
     numliststruct *numlist;
 
-#line 108 "parser.hpp"
+#line 109 "parser.hpp"
 
 };
 typedef union YYSTYPE YYSTYPE;

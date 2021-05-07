@@ -39,6 +39,10 @@ proc 					TOKEN(RPROCEDURE);
 
 ")"						TOKEN(TRPAREN);
 
+"["                     TOKEN(TRCOR);
+
+"]"                     TOKEN(TLCOR);
+
 
 "=="					TOKEN(TEQUAL);
 "<"     				TOKEN(TLESS);
@@ -50,7 +54,7 @@ proc 					TOKEN(RPROCEDURE);
 "=>"					TOKEN(TREF);
 "<=>"					TOKEN(TREF);
 
-
+arr                     TOKEN(RARRAY);
 int						TOKEN(RINTEGER);
 float					TOKEN(RFLOAT);
 if 						TOKEN(RIF);
@@ -70,6 +74,7 @@ println                 TOKEN(RPRINTLN);
 
 \[\*(([^\*]\])*[^\]]*)*\*\]					TOKEN(TCOMMENT)  ; {}
 [a-zA-Z]+(_[a-zA-Z0-9]|[a-zA-Z0-9])*    	TOKEN(TIDENTIFIER) ; 
+
 [0-9]+\.[0-9]*((e|E)(\+|\-)?)?[0-9]+          TOKEN(TDOUBLE);
 [0-9]+                  					TOKEN(TINTEGER); 
 

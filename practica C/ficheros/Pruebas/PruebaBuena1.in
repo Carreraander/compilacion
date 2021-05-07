@@ -1,5 +1,6 @@
 program ejemplo 
   int a,b,c; [*comentario*]
+  int a[];
   float [*comentario*] d,e ;
   proc sumar ( int <= x; int <= y; int <=> resul)  [*comentario
   multilinea*] 
@@ -16,7 +17,7 @@ program ejemplo
           iteraciones = iteraciones + 1; 
         } until  aux == 0 
         else {
-          if resul < 0 {
+          if A[i] < 0 {
               exit;
           };
           println(iteraciones);
