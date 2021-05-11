@@ -21,6 +21,8 @@
    expresionstruct makecomparison(std::string &s1, std::string &s2, std::string &s3, std::vector<std::string> &s4) ;
    expresionstruct makearithmetic(std::string &s1, std::string &s2, std::string &s3) ;
 
+   //TODO: Añadir restricciones semanticas para makearithmetic
+
    vector<int> *unir(vector<int> lis1, vector<int> lis2);
    
    Codigo codigo;
@@ -97,31 +99,73 @@ programa : RPROGRAM TIDENTIFIER
 
 declaraciones :  tipo lista_de_ident TSEMIC 
               {
-                TablaSimbolos st1;
-                st1.anadirProcedimiento($2->back());
-                
-                //codigo.anadirInstruccion($2->back());
-                std::string identificador = $2->back();
-                $2->pop_back();
-                int n = $2->size();
-                
-                //Guardar parametros menos el front ya que es el identificador, cuidado valor de n
-                for (int i = 0; i < n-1;i++){
-                  st1.anadirParametro(identificador,*$1,$2->back());
-                  $2->pop_back();
-                }
-                //st1.anadirVariable($2->back(),*$1);
+                std::string estruct = $2->back();
+                int w = $2->size(),k;
+                /* CODIGO PARA COMPROBAR LO QUE CONTIENE EL ARRAY Y SU DIMENSION
+                // string str;
+                // stringstream ss;  
+                // ss << w;  
+                // ss >> str;  
+                // // for (int i = 0; i < w; i++){
+                // //   codigo.anadirInstruccion($2->back());
+                // //   $2->pop_back();
+                // // }
+                // codigo.anadirInstruccion(str);
+                */
+                if (estruct == "Array"){
+                  // 5 posiciones de vector por cada array unidimensional + dimension del array
+                  for ( k = 0; k < w; k = k + 5) {
 
-                string str;
-                int n1 = st1.numArgsProcedimiento(identificador);
-                stringstream ss;  
-                ss << n1;  
-                ss >> str;  
+                    //Quito "Array" del vector
+                    $2->pop_back();
+                    int num;
+                    stringstream ss1;  
+                    ss1 << $2->back();  
+                    ss1 >> num;
+                    int numdim = num;
+
+                    //Quito el numero de dimensiones del vector
+                    $2->pop_back();
+
+                    //Creo procedimiento con el identificador
+                    st.anadirProcedimiento($2->back());
+                    std::string identificador = $2->back();
+                    //Quito el identificador del vector
+                    $2->pop_back();
+                    
+                    //Guardamos parametros segun la dimension (dimension inicializada a 0 para mayor facilidad)
+                    for (int i = 0; i < numdim + 1;i++){
+                      st.anadirParametro(identificador,*$1,*$1);
+                      $2->pop_back();
+                    }
+            
+                    string str;
+                    int n1 = st.numArgsProcedimiento(identificador);
+
+                    stringstream ss;  
+                    ss << k + numdim;  
+                    ss >> str;  
+
+                    //Nuevo vector para distinguir los arrays declarados en una misma linea
+                    std::vector<std::string> decl;
+                    decl.push_back($2->back());
+                    //Quito la declaracion del array del vector Ej: a[i]
+                    $2->pop_back();
+
+                    codigo.anadirDeclaraciones(decl, *$1);
+                    
+                    k = k + numdim ;
+                  }
+                }
+                else{
+                  for (int i = 0; i < w;i++){
+                    st.anadirVariable($2->back(),*$1);
+                    $2->pop_back();
+                  }
+                  //stPila.empilar(st);
+                  codigo.anadirDeclaraciones(*$2, *$1);
+                }
                 
-                //codigo.anadirInstruccion(str);
-                //$2->pop_back();
-                stPila.empilar(st1);
-                codigo.anadirDeclaraciones(*$2, *$1);
               }
         declaraciones
       | TCOMMENT declaraciones
@@ -129,8 +173,8 @@ declaraciones :  tipo lista_de_ident TSEMIC
       | %empty
       ;
 
-//TODO: ARREGLAR LISTA DE IDENTIFICADORES PARA AÑADIR ARRAYS
-// int ander[],juan[],pedro[];
+
+
 
 lista_de_ident : TIDENTIFIER resto_lista_id
       {
@@ -143,36 +187,40 @@ lista_de_ident : TIDENTIFIER resto_lista_id
         $$ = new vector<string>;
         // Creamos un vector auxiliar del mismo tamaño que el vector de id de arrays
         int n = $5->size();
+        // Variable para detectar la dimension del array
+        int numdim = 0;
         std::vector<string> aux(n+1);
         std::ostringstream oss;
-        //Guardamos en el vector auxiliar las dimensiones del array junto con su identificador 
+        // Guardamos en el vector auxiliar las dimensiones del array junto con su identificador 
         for (auto &auxi : *$5){
              aux.push_back("[" + auxi + "]");
+             numdim++;
         }
         aux.push_back("[" + *$3 + "]");
         
-        //Convertimos en string para que no haya problemas a la hora de mostrar por pantalla.
+        //Convertimos en string para que no haya problemas a la hora de mostrar la incializacion.
 
         std::copy(aux.rbegin(), aux.rend(),
-          std::ostream_iterator<string>(oss));
+        std::ostream_iterator<string>(oss));
 
         //Insertamos en la lista de identificadores el identificador + dimensiones
         $6->push_back(*$1 + oss.str());
 
-        //codigo.anadirInstruccion($5->back());
-        //añadimos tipo de cada dimension a la cola
+        // añadimos parametro? de cada dimension al vector Ej: i,j,k...
         for (auto &auxi : *$5){
           $6->push_back(auxi);
         }
+        // Añadimos el primer parametro?
         $6->push_back(*$3);
+        // Añadimos el identificador
         $6->push_back(*$1);
         string str;
-        
         stringstream ss;  
-        ss << n;  
+        ss << numdim;  
         ss >> str;
-
-        //codigo.anadirInstruccion(str);
+        // Añadimos la dimension del array y la palabra "Array" para diferencia de un int normal.
+        $6->push_back(str);
+        $6->push_back("Array");
         $$ = $6;
 
       }
@@ -191,12 +239,37 @@ resto_lista_id : TCOMMA TIDENTIFIER resto_lista_id
       $3->push_back(*$2);
       $$ = $3;
       }
-      | TCOMMA TIDENTIFIER array_id resto_lista_id
+      | TCOMMA TIDENTIFIER TLCOR variable TRCOR array_id resto_lista_id
       {
         $$ = new vector<string>;
-        $4->push_back(*$2 + "[" + $3->back() + "]");
-        //$3->push_back(*$1);
-        $$ = $4;
+        int n = $6->size();
+        int numdim1 = 0;
+        std::vector<string> aux(n+1);
+        std::ostringstream oss;
+
+        for (auto &auxi : *$6){
+             aux.push_back("[" + auxi + "]");
+             numdim1++;
+        }
+
+        aux.push_back("[" + *$4 + "]");
+        std::copy(aux.rbegin(), aux.rend(),
+        std::ostream_iterator<string>(oss));
+        $7->push_back(*$2 + oss.str());
+
+        for (auto &auxi : *$6){
+          $7->push_back(auxi);
+        }
+
+        $7->push_back(*$4);
+        $7->push_back(*$2);
+        string str;
+        stringstream ss;  
+        ss << numdim1;  
+        ss >> str;
+        $7->push_back(str);
+        $7->push_back("Array");
+        $$ = $7;
       }
       | TCOMMA TIDENTIFIER TLCOR TRCOR resto_lista_id
       {
@@ -450,66 +523,29 @@ expresion : expresion TEQUAL expresion
       { $$ = new expresionstruct; $$->str = $2->str; }
       | TIDENTIFIER TLCOR variable TRCOR array_id
       { 
-        // $$ = new expresionstruct; 
-        // // Creamos un vector auxiliar del mismo tamaño que el vector de id de arrays
-        // int n = $2->size();
-        // std::vector<string> aux(n);
-        // std::ostringstream oss;
-        // //Guardamos en el vector auxiliar las dimensiones del array junto con su identificador 
-        // for (auto &auxi : *$2){
-        //      aux.push_back("[" + auxi + "]");
-        // }
-        // //Convertimos en string para que no haya problemas a la hora de mostrar por pantalla.
-        // std::copy(aux.rbegin(), aux.rend(),
-        //   std::ostream_iterator<string>(oss));
-        
-        // //int n = st1.numArgsProcedimiento(identificador);
-        // string str;
-        
-        // stringstream ss;  
-        // ss << n;  
-        // ss >> str;
-
-        // //codigo.anadirInstruccion(str);
-        // for (auto &auxi : *$2){
-        //   $$->arr.push_back(auxi);
-        // }
-        // $$->arr.push_back(*$1);
-        // $$->str = *$1 + oss.str();
-        
         $$ = new expresionstruct;
-        // Creamos un vector auxiliar del mismo tamaño que el vector de id de arrays
         int n = $5->size();
         std::vector<string> aux(n+1);
         std::ostringstream oss;
-        //Guardamos en el vector auxiliar las dimensiones del array junto con su identificador 
+
         for (auto &auxi : *$5){
              aux.push_back("[" + auxi + "]");
         }
+
         aux.push_back("[" + *$3 + "]");
-        
-        //Convertimos en string para que no haya problemas a la hora de mostrar por pantalla.
-
         std::copy(aux.rbegin(), aux.rend(),
-          std::ostream_iterator<string>(oss));
-          
-        //Insertamos en la lista de identificadores el identificador + dimensiones
-        
+        std::ostream_iterator<string>(oss));
 
-        //codigo.anadirInstruccion($5->back());
-        //añadimos tipo de cada dimension a la cola
         for (auto &auxi : *$5){
           $$->arr.push_back(auxi);
         }
+        
         $$->arr.push_back(*$3);
         $$->arr.push_back(*$1);
         string str;
-        
         stringstream ss;  
         ss << n;  
         ss >> str;
-
-        //codigo.anadirInstruccion(str);
 
         $$->str = *$1 + oss.str();
 
@@ -526,7 +562,7 @@ std::string tipoNum(const string& str)
   std::string::size_type sz;
   std::stoi (str,&sz);
   if (str.substr(sz) == ".") {
-    return "float";
+    return "real";
   }
   else{
     return "ent";
@@ -535,23 +571,24 @@ std::string tipoNum(const string& str)
 
 expresionstruct makecomparison(std::string &s1, std::string &s2, std::string &s3, std::vector<std::string> &s4) {
   expresionstruct tmp ; 
-  int i,n,x;
-  TablaSimbolos st2 = stPila.tope();
+  int n,x;
+
   
-  codigo.anadirInstruccion(s4.back()) ;
+  //codigo.anadirInstruccion(s4.back()) ;
   
   tmp.trues.push_back(codigo.obtenRef()) ;
   codigo.anadirInstruccion("if " + s1 + s2 + s3 + " goto") ;
 
-  if (!st2.existeId(s4.back())){
+  if (!st.existeId(s4.back())){
     codigo.anadirInstruccion("El identificador no esta definido");
   }
   else {
-    n = st2.numArgsProcedimiento(s4.back());
-    for (i = 0; i < n; i++){
-        std::pair <std::string,std::string> argumento; 
-        if (argumento.second == tipoNum(s3))
-          codigo.anadirInstruccion("Las variables no concuerdan en tipo");
+    n = st.numArgsProcedimiento(s4.back());
+
+    std::pair <std::string,std::string> argumento = st.obtenerTiposParametro(s4.back(),0); 
+    if (argumento.second != tipoNum(s3)){
+      //codigo.anadirInstruccion(argumento.second + " " + tipoNum(s3));
+      codigo.anadirInstruccion("Las variables no concuerdan en tipo");
     }
     s4.pop_back();
     x = s4.size();
@@ -568,9 +605,20 @@ expresionstruct makecomparison(std::string &s1, std::string &s2, std::string &s3
 expresionstruct makecomparison(std::string &s1, std::string &s2, std::string &s3) {
   expresionstruct tmp ; 
 
+  
+
+
   tmp.trues.push_back(codigo.obtenRef()) ;
   codigo.anadirInstruccion("if " + s1 + s2 + s3 + " goto") ;
-
+  if (!st.existeId(s1)){
+    codigo.anadirInstruccion("El identificador no esta definido");
+  }
+  else {
+    std::string tipodevar = st.obtenerTipo(s1);
+    if (tipodevar != tipoNum(s3)){
+       codigo.anadirInstruccion("Las variables no concuerdan en tipo");
+    }
+  }
   tmp.falses.push_back(codigo.obtenRef()) ;
   codigo.anadirInstruccion("goto") ;
   return tmp ;
@@ -581,6 +629,16 @@ expresionstruct makecomparison(std::string &s1, std::string &s2, std::string &s3
 
 expresionstruct makearithmetic(std::string &s1, std::string &s2, std::string &s3) {
   expresionstruct tmp ; 
+  // if (!st.existeId(s1)){
+  //   codigo.anadirInstruccion("El identificador no esta definido");
+  // }
+  // else {
+  //   std::string tipodevar = st.obtenerTipo(s1);
+  //   if (tipodevar != tipoNum(s3)){
+  //      codigo.anadirInstruccion("Las variables no concuerdan en tipo");
+  //   }
+  // }
+
   tmp.str = codigo.nuevoId() ;
   codigo.anadirInstruccion(tmp.str + ":=" + s1 + s2 + s3 + ";") ;
   return tmp ;

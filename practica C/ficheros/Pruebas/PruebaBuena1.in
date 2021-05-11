@@ -1,10 +1,11 @@
 program ejemplo 
-
-  int resul;
+  int resul,aux;
+  int a[i][b],c[j];
+  int iteraciones;
 
   proc sumar ( int <= x; int <= y; int <=> resul)  [*comentario
   multilinea*] 
-    int aux, iteraciones;
+
     {
       aux = x;
       resul = k;  
@@ -17,7 +18,7 @@ program ejemplo
           iteraciones = iteraciones + 1; 
         } until  aux == 0 
         else {
-          if a[j] > 0 {
+          if a[i][b] > 0.00 {
               exit;
           };
           println(iteraciones);
