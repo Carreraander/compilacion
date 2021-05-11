@@ -66,6 +66,8 @@ until					TOKEN(RUNTIL);
 exit					TOKEN(REXIT);
 read                    TOKEN(RREAD);
 println                 TOKEN(RPRINTLN);
+or                      TOKEN(ROR);
+not                     TOKEN(RNOT);
 
 "#"[^\n]*				TOKEN(TCOMMENT);{}									
 

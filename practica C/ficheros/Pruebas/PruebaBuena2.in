@@ -4,7 +4,7 @@ program ejemplo_con_nombre_muy_largo
     int aux, resul, iteraciones;
     {
       if x==y{
-  	   	if resul < 1000{
+  	   	if resul < 1000 or aux > 10{
   			  iteraciones = 0;   	
       		do {
             do{

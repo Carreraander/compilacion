@@ -6,6 +6,7 @@ struct expresionstruct {
   string str ;
   vector<int> trues ;
   vector<int> falses ;
+  vector<std::string> arr;
 };
 
 struct numliststruct {

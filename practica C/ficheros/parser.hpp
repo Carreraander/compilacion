@@ -55,42 +55,44 @@ extern int yydebug;
     RELSE = 261,
     RDO = 262,
     RWHILE = 263,
-    RFOREVER = 264,
-    RENDREPEAT = 265,
-    RUNTIL = 266,
-    RENDPROGRAM = 267,
-    RPROGRAM = 268,
-    RPROCEDURE = 269,
-    RIN = 270,
-    ROUT = 271,
-    RREAD = 272,
-    RPRINTLN = 273,
-    REXIT = 274,
-    TMUL = 275,
-    TDIV = 276,
-    TPLUS = 277,
-    TMINUS = 278,
-    TASSIG = 279,
-    TSEMIC = 280,
-    TLBRACE = 281,
-    TRBRACE = 282,
-    TCOMMA = 283,
-    TLPAREN = 284,
-    TRPAREN = 285,
-    TRCOR = 286,
-    TLCOR = 287,
-    TEQUAL = 288,
-    TNOTEQ = 289,
-    TLESS = 290,
-    TLESSEQ = 291,
-    TGREATER = 292,
-    TGREATEREQ = 293,
-    TVAL = 294,
-    TREF = 295,
-    TINTEGER = 296,
-    TDOUBLE = 297,
-    TIDENTIFIER = 298,
-    TCOMMENT = 299
+    RNOT = 264,
+    RFOREVER = 265,
+    RENDREPEAT = 266,
+    RUNTIL = 267,
+    RENDPROGRAM = 268,
+    RPROGRAM = 269,
+    RPROCEDURE = 270,
+    RIN = 271,
+    ROUT = 272,
+    RREAD = 273,
+    RPRINTLN = 274,
+    REXIT = 275,
+    ROR = 276,
+    TMUL = 277,
+    TDIV = 278,
+    TPLUS = 279,
+    TMINUS = 280,
+    TASSIG = 281,
+    TSEMIC = 282,
+    TLBRACE = 283,
+    TRBRACE = 284,
+    TCOMMA = 285,
+    TLPAREN = 286,
+    TRPAREN = 287,
+    TRCOR = 288,
+    TLCOR = 289,
+    TEQUAL = 290,
+    TNOTEQ = 291,
+    TLESS = 292,
+    TLESSEQ = 293,
+    TGREATER = 294,
+    TGREATEREQ = 295,
+    TVAL = 296,
+    TREF = 297,
+    TINTEGER = 298,
+    TDOUBLE = 299,
+    TIDENTIFIER = 300,
+    TCOMMENT = 301
   };
 #endif
 
@@ -98,7 +100,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 36 "parser.y"
+#line 38 "parser.y"
 
     string *str ; 
     vector<string> *list ;
@@ -106,7 +108,7 @@ union YYSTYPE
     int number ;
     numliststruct *numlist;
 
-#line 110 "parser.hpp"
+#line 112 "parser.hpp"
 
 };
 typedef union YYSTYPE YYSTYPE;

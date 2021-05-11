@@ -1,0 +1,7 @@
+program ejemplo 
+int resul[a][b];
+{
+	if resul[a][47] > 0 {
+		resul = 10;
+	};
+}
