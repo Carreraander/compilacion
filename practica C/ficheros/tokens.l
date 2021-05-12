@@ -68,6 +68,7 @@ read                    TOKEN(RREAD);
 println                 TOKEN(RPRINTLN);
 or                      TOKEN(ROR);
 not                     TOKEN(RNOT);
+and						TOKEN(RAND);
 
 "#"[^\n]*				TOKEN(TCOMMENT);{}									
 

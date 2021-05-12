@@ -68,6 +68,10 @@
 /* First part of user prologue.  */
 #line 3 "parser.y"
 
+  /*TODO: 
+    - Llamadas a procedimientos?
+    - Arreglar arrays no deben tener un identificador dentro a la hora de declarar sino 
+  */
    #include <stdio.h>
    #include <iostream>
    #include <vector>
@@ -98,7 +102,7 @@
    }
 
 
-#line 102 "parser.cpp"
+#line 106 "parser.cpp"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -153,43 +157,44 @@ extern int yydebug;
     RDO = 262,
     RWHILE = 263,
     RNOT = 264,
-    RFOREVER = 265,
-    RENDREPEAT = 266,
-    RUNTIL = 267,
-    RENDPROGRAM = 268,
-    RPROGRAM = 269,
-    RPROCEDURE = 270,
-    RIN = 271,
-    ROUT = 272,
-    RREAD = 273,
-    RPRINTLN = 274,
-    REXIT = 275,
-    ROR = 276,
-    TMUL = 277,
-    TDIV = 278,
-    TPLUS = 279,
-    TMINUS = 280,
-    TASSIG = 281,
-    TSEMIC = 282,
-    TLBRACE = 283,
-    TRBRACE = 284,
-    TCOMMA = 285,
-    TLPAREN = 286,
-    TRPAREN = 287,
-    TRCOR = 288,
-    TLCOR = 289,
-    TEQUAL = 290,
-    TNOTEQ = 291,
-    TLESS = 292,
-    TLESSEQ = 293,
-    TGREATER = 294,
-    TGREATEREQ = 295,
-    TVAL = 296,
-    TREF = 297,
-    TINTEGER = 298,
-    TDOUBLE = 299,
-    TIDENTIFIER = 300,
-    TCOMMENT = 301
+    RAND = 265,
+    RFOREVER = 266,
+    RENDREPEAT = 267,
+    RUNTIL = 268,
+    RENDPROGRAM = 269,
+    RPROGRAM = 270,
+    RPROCEDURE = 271,
+    RIN = 272,
+    ROUT = 273,
+    RREAD = 274,
+    RPRINTLN = 275,
+    REXIT = 276,
+    ROR = 277,
+    TMUL = 278,
+    TDIV = 279,
+    TPLUS = 280,
+    TMINUS = 281,
+    TASSIG = 282,
+    TSEMIC = 283,
+    TLBRACE = 284,
+    TRBRACE = 285,
+    TCOMMA = 286,
+    TLPAREN = 287,
+    TRPAREN = 288,
+    TRCOR = 289,
+    TLCOR = 290,
+    TEQUAL = 291,
+    TNOTEQ = 292,
+    TLESS = 293,
+    TLESSEQ = 294,
+    TGREATER = 295,
+    TGREATEREQ = 296,
+    TVAL = 297,
+    TREF = 298,
+    TINTEGER = 299,
+    TDOUBLE = 300,
+    TIDENTIFIER = 301,
+    TCOMMENT = 302
   };
 #endif
 
@@ -197,7 +202,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 38 "parser.y"
+#line 42 "parser.y"
 
     string *str ; 
     vector<string> *list ;
@@ -205,7 +210,7 @@ union YYSTYPE
     int number ;
     numliststruct *numlist;
 
-#line 209 "parser.cpp"
+#line 214 "parser.cpp"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -524,19 +529,19 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  4
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   362
+#define YYLAST   358
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  47
+#define YYNTOKENS  48
 /* YYNNTS -- Number of nonterminals.  */
 #define YYNNTS  23
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  80
+#define YYNRULES  81
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  192
+#define YYNSTATES  195
 
 #define YYUNDEFTOK  2
-#define YYMAXUTOK   301
+#define YYMAXUTOK   302
 
 
 /* YYTRANSLATE(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
@@ -578,22 +583,22 @@ static const yytype_int8 yytranslate[] =
       15,    16,    17,    18,    19,    20,    21,    22,    23,    24,
       25,    26,    27,    28,    29,    30,    31,    32,    33,    34,
       35,    36,    37,    38,    39,    40,    41,    42,    43,    44,
-      45,    46
+      45,    46,    47
 };
 
 #if YYDEBUG
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int16 yyrline[] =
 {
-       0,    89,    89,    88,    99,    98,   185,   186,   187,   193,
-     199,   240,   246,   249,   255,   295,   301,   306,   309,   310,
-     311,   312,   315,   321,   329,   330,   331,   332,   336,   335,
-     345,   346,   347,   348,   352,   351,   356,   357,   360,   361,
-     362,   363,   367,   366,   371,   372,   373,   376,   382,   386,
-     390,   396,   403,   413,   426,   433,   439,   444,   450,   456,
-     458,   459,   463,   468,   476,   481,   486,   491,   496,   505,
-     513,   518,   523,   528,   533,   539,   541,   543,   545,   611,
-     614
+       0,    95,    95,    94,   105,   104,   179,   180,   181,   187,
+     193,   235,   241,   244,   250,   282,   288,   293,   296,   297,
+     298,   299,   302,   308,   316,   317,   318,   319,   323,   322,
+     332,   333,   334,   335,   339,   338,   343,   344,   347,   348,
+     349,   350,   354,   353,   358,   359,   360,   363,   369,   373,
+     377,   383,   390,   400,   413,   420,   426,   431,   437,   443,
+     445,   446,   450,   458,   466,   474,   482,   490,   498,   508,
+     518,   526,   531,   536,   541,   546,   552,   554,   556,   558,
+     587,   590
 };
 #endif
 
@@ -603,7 +608,7 @@ static const yytype_int16 yyrline[] =
 static const char *const yytname[] =
 {
   "$end", "error", "$undefined", "RINTEGER", "RFLOAT", "RIF", "RELSE",
-  "RDO", "RWHILE", "RNOT", "RFOREVER", "RENDREPEAT", "RUNTIL",
+  "RDO", "RWHILE", "RNOT", "RAND", "RFOREVER", "RENDREPEAT", "RUNTIL",
   "RENDPROGRAM", "RPROGRAM", "RPROCEDURE", "RIN", "ROUT", "RREAD",
   "RPRINTLN", "REXIT", "ROR", "TMUL", "TDIV", "TPLUS", "TMINUS", "TASSIG",
   "TSEMIC", "TLBRACE", "TRBRACE", "TCOMMA", "TLPAREN", "TRPAREN", "TRCOR",
@@ -626,11 +631,11 @@ static const yytype_int16 yytoknum[] =
      265,   266,   267,   268,   269,   270,   271,   272,   273,   274,
      275,   276,   277,   278,   279,   280,   281,   282,   283,   284,
      285,   286,   287,   288,   289,   290,   291,   292,   293,   294,
-     295,   296,   297,   298,   299,   300,   301
+     295,   296,   297,   298,   299,   300,   301,   302
 };
 # endif
 
-#define YYPACT_NINF (-147)
+#define YYPACT_NINF (-145)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
@@ -644,26 +649,26 @@ static const yytype_int16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int16 yypact[] =
 {
-      18,    -6,    63,  -147,  -147,    11,  -147,  -147,    11,     5,
-      40,    32,    40,    52,     9,     6,     9,    86,  -147,    41,
-    -147,  -147,     9,    72,  -147,  -147,    72,    85,    46,    95,
-    -147,  -147,     0,   114,   116,    13,  -147,    50,    81,  -147,
-      11,    15,     0,    19,    67,   119,   148,   144,   138,   143,
-     149,  -147,    50,   124,   -21,    90,    95,    95,   131,   147,
-    -147,    32,    15,   154,    10,   145,    11,     5,    67,    67,
-    -147,  -147,   159,   131,   316,  -147,   166,    67,    50,    67,
-    -147,  -147,    67,    13,   118,    50,    13,   154,   155,  -147,
-    -147,   173,   107,  -147,  -147,  -147,    44,   115,   256,    50,
-    -147,    67,    67,    67,    67,    67,    67,    67,    67,    67,
-      67,  -147,   167,  -147,  -147,   316,    37,   276,   296,    95,
-     147,   139,    95,   173,   156,  -147,   157,  -147,  -147,   142,
-      67,   158,   158,    27,    27,   115,   115,   115,   115,   115,
-     115,  -147,   137,  -147,   185,   187,   189,  -147,    13,   147,
-      43,   160,   147,   115,   179,   205,   221,  -147,  -147,  -147,
-      95,  -147,    25,    43,   172,  -147,  -147,  -147,  -147,   194,
-      25,   154,   172,  -147,   200,    67,   203,   188,   107,  -147,
-     236,  -147,   157,  -147,    43,   207,   172,  -147,   202,  -147,
-     206,  -147
+     -10,    51,    56,  -145,  -145,    14,  -145,  -145,    14,    -3,
+      42,    75,    42,    79,    10,    20,    10,    89,  -145,   -12,
+    -145,  -145,    10,   112,  -145,  -145,   112,   115,   116,   123,
+    -145,  -145,    68,    91,   142,   147,  -145,    98,   -13,  -145,
+      14,    16,    68,    21,    62,   153,   168,   182,   160,   169,
+     172,  -145,    98,   149,    39,   152,   123,   123,   159,   174,
+    -145,    75,    16,   113,    83,   167,    14,    -3,    62,    62,
+    -145,  -145,   180,   159,   292,  -145,   187,    62,    98,    62,
+    -145,  -145,    62,   147,    17,    98,   147,   113,   170,  -145,
+    -145,   150,   121,  -145,  -145,  -145,    66,   311,   232,    98,
+    -145,  -145,    62,    62,    62,    62,    62,    62,    62,    62,
+      62,    62,  -145,   194,  -145,  -145,   292,    96,   252,   272,
+     123,   174,    80,   123,   150,   177,  -145,   178,  -145,  -145,
+      84,    62,    62,   179,   179,    46,    46,   280,   280,   280,
+     280,   280,   280,  -145,   128,  -145,   199,   203,   204,  -145,
+     147,   174,    45,   134,   174,   311,   311,   164,   215,   200,
+    -145,  -145,  -145,   123,  -145,    25,    45,   186,  -145,  -145,
+    -145,  -145,   209,    25,   113,   186,  -145,   213,    62,   216,
+     193,   121,  -145,   212,  -145,   178,  -145,    45,   214,   186,
+    -145,   183,  -145,   217,  -145
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -678,35 +683,35 @@ static const yytype_int8 yydefact[] =
        8,     0,    31,     8,     0,     0,     0,     0,     0,     0,
        0,     3,    49,    47,     0,     0,    13,    11,    60,    23,
       61,     5,     0,     0,     0,    32,     8,    25,     0,     0,
-      75,    76,    59,    74,    80,    80,     0,     0,     0,     0,
+      76,    77,    59,    75,    81,    81,     0,     0,     0,     0,
       55,    58,     0,    16,     0,     0,    16,     0,    36,    38,
-      39,     0,     0,    30,    37,    33,     0,    69,     0,     0,
-      80,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,    79,     0,    48,    80,    80,     0,     0,     0,    15,
-      23,     0,    10,     0,    40,    41,    34,    48,    77,     0,
-       0,    72,    73,    70,    71,    62,    67,    64,    66,    63,
-      65,    48,     0,    48,     0,     0,     0,    50,    16,    23,
-      46,     0,    23,    68,     0,     0,    80,    54,    56,    57,
-      14,    22,     0,    46,    35,    29,    78,    80,    80,     0,
-       0,     0,    44,    45,     0,     0,     0,    20,     0,    51,
-       0,    52,    42,    80,    46,     0,    43,    48,     0,    80,
-       0,    53
+      39,     0,     0,    30,    37,    33,     0,    70,     0,     0,
+      81,    81,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,    80,     0,    48,    81,    81,     0,     0,     0,
+      15,    23,     0,    10,     0,    40,    41,    34,    48,    78,
+       0,     0,     0,    73,    74,    71,    72,    62,    67,    64,
+      66,    63,    65,    48,     0,    48,     0,     0,     0,    50,
+      16,    23,    46,     0,    23,    69,    68,     0,     0,    81,
+      54,    56,    57,    14,    22,     0,    46,    35,    29,    79,
+      81,    81,     0,     0,     0,    44,    45,     0,     0,     0,
+      20,     0,    51,     0,    52,    42,    81,    46,     0,    43,
+      48,     0,    81,     0,    53
 };
 
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int16 yypgoto[] =
 {
-    -147,  -147,  -147,     4,  -147,   -90,   -24,    -8,  -104,    -3,
-    -147,  -147,   195,   174,  -147,   -87,  -146,  -147,  -106,  -147,
-     -25,    -2,   -74
+    -145,  -145,  -145,    -4,  -145,   -90,   -24,    -8,  -106,    -2,
+    -145,  -145,   218,   201,  -145,   -87,  -144,  -145,  -105,  -145,
+     -25,   -27,   -69
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int16 yydefgoto[] =
 {
       -1,     2,     5,    11,    40,    19,    29,    10,    86,    23,
-      16,    32,    43,    64,   150,    92,   164,   184,    33,    53,
-      73,    74,   112
+      16,    32,    43,    64,   152,    92,   167,   187,    33,    53,
+      73,    74,   113
 };
 
   /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -714,124 +719,122 @@ static const yytype_int16 yydefgoto[] =
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_uint8 yytable[] =
 {
-      12,   113,   126,    38,   124,    82,    15,   142,    54,     9,
-      56,    57,    58,    26,     6,     7,   148,   172,     6,     7,
-      13,   151,     6,     7,    13,    60,   130,    58,     6,     7,
-      84,    41,     1,    63,    24,   154,   124,   156,   186,     3,
-     143,   144,    93,    27,    61,   161,    42,    67,   166,   101,
-     102,    14,    25,   116,    87,    22,    94,     8,    12,   119,
-     121,    62,   122,     4,    96,    66,    97,    98,    30,   145,
-     162,   170,   127,   111,   129,   115,    68,   117,    20,    35,
-     118,   188,   169,    60,   178,    17,    18,    31,   182,   163,
-      25,    36,    37,   174,   175,    36,    37,    21,    69,   131,
-     132,   133,   134,   135,   136,   137,   138,   139,   140,   185,
-      70,    71,    72,    37,    59,   190,    27,    54,    25,    44,
-      28,    45,    46,    83,   160,    47,    54,    60,   153,    54,
-      34,    54,    48,    49,    50,    36,    37,   101,   102,   103,
-     104,    39,    44,    51,    45,    46,    27,    75,    47,    77,
-      55,   120,    17,   125,   171,    48,    49,    50,    76,    36,
-      52,   111,   177,    54,    60,    44,   155,    45,    46,    78,
-      81,    47,   149,   180,    79,   152,    80,    60,    48,    49,
-      50,    85,    36,    52,    44,    60,    45,    46,    60,   165,
-      47,    95,    89,    99,   114,   141,    90,    48,    49,    50,
-      91,    94,   125,    31,   111,    36,    52,    44,   167,    45,
-      46,    89,   157,    47,   158,    90,   159,   168,   173,   123,
-      48,    49,    50,   176,    36,    52,    44,   179,    45,    46,
-     181,   189,    47,   191,    18,   187,    88,    65,     0,    48,
-      49,    50,   183,     0,     0,     0,     0,    36,    52,     0,
-       0,     0,     0,     0,     0,     0,     0,   100,   101,   102,
-     103,   104,     0,     0,     0,     0,    36,    52,     0,     0,
-       0,   105,   106,   107,   108,   109,   110,   100,   101,   102,
-     103,   104,   111,     0,     0,     0,     0,     0,   128,     0,
-       0,   105,   106,   107,   108,   109,   110,   100,   101,   102,
-     103,   104,   111,     0,     0,     0,     0,     0,   146,     0,
-       0,   105,   106,   107,   108,   109,   110,   100,   101,   102,
-     103,   104,   111,   147,     0,     0,     0,     0,     0,     0,
-       0,   105,   106,   107,   108,   109,   110,   100,   101,   102,
-     103,   104,   111,     0,     0,     0,     0,     0,     0,     0,
-       0,   105,   106,   107,   108,   109,   110,     0,     0,     0,
-       0,     0,   111
+      12,     9,   127,    38,   125,     1,   114,    15,    54,   144,
+      56,    57,    58,    13,    26,   150,    30,     6,     7,     6,
+       7,    59,   175,   153,     6,     7,    13,    58,     6,     7,
+      84,   131,   132,    63,    60,    31,    61,   125,   157,    67,
+     159,    97,    98,   189,    14,   164,   145,   146,   169,    24,
+     116,   121,   118,   117,    87,   119,     4,    22,    12,   120,
+     122,     8,   123,    62,    60,    96,    82,    25,    66,   102,
+     103,    68,   173,   165,   130,   133,   134,   135,   136,   137,
+     138,   139,   140,   141,   142,   191,    60,   181,    17,    18,
+     172,   185,   166,   112,    69,   128,    44,     3,    45,    46,
+      41,   177,   178,    47,   155,   156,    70,    71,    72,    37,
+      48,    49,    50,    25,   151,    42,    93,   188,   154,    54,
+      27,    51,    20,   193,    28,    21,   163,    60,    54,   147,
+      94,    60,    54,    44,    54,    45,    46,    36,    52,    44,
+      47,    45,    46,    60,    36,    37,    47,    48,    49,    50,
+      35,   183,    89,    48,    49,    50,    90,   174,   158,    25,
+      91,    34,    36,    37,   168,   180,    54,    17,   126,    44,
+      39,    45,    46,    27,    36,    52,    47,    55,    27,    76,
+      36,    52,    75,    48,    49,    50,    83,    77,    44,    89,
+      45,    46,    78,    90,   170,    47,    81,   124,    36,    37,
+      80,    79,    48,    49,    50,    44,    60,    45,    46,    85,
+      36,    52,    47,   192,    95,    99,   115,    94,   186,    48,
+      49,    50,   100,   143,   126,    31,   112,   160,   171,    36,
+      52,   161,   162,   176,   101,   102,   103,   104,   105,   179,
+      18,   182,   100,   190,   184,   194,    36,    52,   106,   107,
+     108,   109,   110,   111,   101,   102,   103,   104,   105,   112,
+      65,     0,   100,    88,     0,   129,     0,     0,   106,   107,
+     108,   109,   110,   111,   101,   102,   103,   104,   105,   112,
+       0,     0,   100,     0,     0,   148,     0,     0,   106,   107,
+     108,   109,   110,   111,   101,   102,   103,   104,   105,   112,
+     149,     0,   100,   102,   103,   104,   105,     0,   106,   107,
+     108,   109,   110,   111,   101,   102,   103,   104,   105,   112,
+       0,     0,     0,     0,     0,     0,     0,   112,   106,   107,
+     108,   109,   110,   111,   102,   103,   104,   105,     0,   112,
+       0,     0,     0,     0,     0,     0,     0,   106,   107,   108,
+     109,   110,   111,     0,     0,     0,     0,     0,   112
 };
 
 static const yytype_int16 yycheck[] =
 {
-       8,    75,    92,    28,    91,    26,     9,   113,    33,     5,
-      34,    35,    37,    16,     3,     4,   120,   163,     3,     4,
-      15,   127,     3,     4,    15,    46,   100,    52,     3,     4,
-      55,    31,    14,    41,    28,   141,   123,   143,   184,    45,
-     114,   115,    32,    30,    40,   149,    46,    43,   152,    22,
-      23,    46,    46,    78,    62,    46,    46,    46,    66,    83,
-      85,    46,    86,     0,    67,    46,    68,    69,    27,    32,
-      27,    46,    28,    46,    99,    77,     9,    79,    46,    33,
-      82,   187,   156,    46,   171,    45,    46,    46,   178,    46,
-      46,    45,    46,   167,   168,    45,    46,    45,    31,   101,
-     102,   103,   104,   105,   106,   107,   108,   109,   110,   183,
-      43,    44,    45,    46,    33,   189,    30,   142,    46,     5,
-      34,     7,     8,    33,   148,    11,   151,    46,   130,   154,
-      45,   156,    18,    19,    20,    45,    46,    22,    23,    24,
-      25,    46,     5,    29,     7,     8,    30,    28,    11,     5,
-      34,    33,    45,    46,   162,    18,    19,    20,    10,    45,
-      46,    46,   170,   188,    46,     5,    29,     7,     8,    31,
-      46,    11,    33,   175,    31,    33,    27,    46,    18,    19,
-      20,    34,    45,    46,     5,    46,     7,     8,    46,    29,
-      11,    46,    38,    34,    28,    28,    42,    18,    19,    20,
-      46,    46,    46,    46,    46,    45,    46,     5,    29,     7,
-       8,    38,    27,    11,    27,    42,    27,    12,    46,    46,
-      18,    19,    20,    29,    45,    46,     5,    27,     7,     8,
-      27,    29,    11,    27,    46,    28,    62,    42,    -1,    18,
-      19,    20,     6,    -1,    -1,    -1,    -1,    45,    46,    -1,
-      -1,    -1,    -1,    -1,    -1,    -1,    -1,    21,    22,    23,
-      24,    25,    -1,    -1,    -1,    -1,    45,    46,    -1,    -1,
-      -1,    35,    36,    37,    38,    39,    40,    21,    22,    23,
-      24,    25,    46,    -1,    -1,    -1,    -1,    -1,    32,    -1,
-      -1,    35,    36,    37,    38,    39,    40,    21,    22,    23,
-      24,    25,    46,    -1,    -1,    -1,    -1,    -1,    32,    -1,
-      -1,    35,    36,    37,    38,    39,    40,    21,    22,    23,
-      24,    25,    46,    27,    -1,    -1,    -1,    -1,    -1,    -1,
-      -1,    35,    36,    37,    38,    39,    40,    21,    22,    23,
-      24,    25,    46,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
-      -1,    35,    36,    37,    38,    39,    40,    -1,    -1,    -1,
-      -1,    -1,    46
+       8,     5,    92,    28,    91,    15,    75,     9,    33,   114,
+      34,    35,    37,    16,    16,   121,    28,     3,     4,     3,
+       4,    34,   166,   128,     3,     4,    16,    52,     3,     4,
+      55,   100,   101,    41,    47,    47,    40,   124,   143,    43,
+     145,    68,    69,   187,    47,   151,   115,   116,   154,    29,
+      77,    34,    79,    78,    62,    82,     0,    47,    66,    83,
+      85,    47,    86,    47,    47,    67,    27,    47,    47,    23,
+      24,     9,    47,    28,    99,   102,   103,   104,   105,   106,
+     107,   108,   109,   110,   111,   190,    47,   174,    46,    47,
+     159,   181,    47,    47,    32,    29,     5,    46,     7,     8,
+      32,   170,   171,    12,   131,   132,    44,    45,    46,    47,
+      19,    20,    21,    47,    34,    47,    33,   186,    34,   144,
+      31,    30,    47,   192,    35,    46,   150,    47,   153,    33,
+      47,    47,   157,     5,   159,     7,     8,    46,    47,     5,
+      12,     7,     8,    47,    46,    47,    12,    19,    20,    21,
+      34,   178,    39,    19,    20,    21,    43,   165,    30,    47,
+      47,    46,    46,    47,    30,   173,   191,    46,    47,     5,
+      47,     7,     8,    31,    46,    47,    12,    35,    31,    11,
+      46,    47,    29,    19,    20,    21,    34,     5,     5,    39,
+       7,     8,    32,    43,    30,    12,    47,    47,    46,    47,
+      28,    32,    19,    20,    21,     5,    47,     7,     8,    35,
+      46,    47,    12,    30,    47,    35,    29,    47,     6,    19,
+      20,    21,    10,    29,    47,    47,    47,    28,    13,    46,
+      47,    28,    28,    47,    22,    23,    24,    25,    26,    30,
+      47,    28,    10,    29,    28,    28,    46,    47,    36,    37,
+      38,    39,    40,    41,    22,    23,    24,    25,    26,    47,
+      42,    -1,    10,    62,    -1,    33,    -1,    -1,    36,    37,
+      38,    39,    40,    41,    22,    23,    24,    25,    26,    47,
+      -1,    -1,    10,    -1,    -1,    33,    -1,    -1,    36,    37,
+      38,    39,    40,    41,    22,    23,    24,    25,    26,    47,
+      28,    -1,    10,    23,    24,    25,    26,    -1,    36,    37,
+      38,    39,    40,    41,    22,    23,    24,    25,    26,    47,
+      -1,    -1,    -1,    -1,    -1,    -1,    -1,    47,    36,    37,
+      38,    39,    40,    41,    23,    24,    25,    26,    -1,    47,
+      -1,    -1,    -1,    -1,    -1,    -1,    -1,    36,    37,    38,
+      39,    40,    41,    -1,    -1,    -1,    -1,    -1,    47
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
      symbol of state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,    14,    48,    45,     0,    49,     3,     4,    46,    50,
-      54,    50,    54,    15,    46,    56,    57,    45,    46,    52,
-      46,    45,    46,    56,    28,    46,    56,    30,    34,    53,
-      27,    46,    58,    65,    45,    33,    45,    46,    67,    46,
-      51,    31,    46,    59,     5,     7,     8,    11,    18,    19,
-      20,    29,    46,    66,    67,    34,    53,    53,    67,    33,
-      46,    50,    46,    54,    60,    59,    46,    50,     9,    31,
-      43,    44,    45,    67,    68,    28,    10,     5,    31,    31,
-      27,    46,    26,    33,    67,    34,    55,    54,    60,    38,
-      42,    46,    62,    32,    46,    46,    56,    68,    68,    34,
-      21,    22,    23,    24,    25,    35,    36,    37,    38,    39,
-      40,    46,    69,    69,    28,    68,    67,    68,    68,    53,
-      33,    67,    53,    46,    62,    46,    52,    28,    32,    67,
-      69,    68,    68,    68,    68,    68,    68,    68,    68,    68,
-      68,    28,    65,    69,    69,    32,    32,    27,    55,    33,
-      61,    65,    33,    68,    65,    29,    65,    27,    27,    27,
-      53,    55,    27,    46,    63,    29,    55,    29,    12,    69,
-      46,    54,    63,    46,    69,    69,    29,    54,    62,    27,
-      68,    27,    52,     6,    64,    69,    63,    28,    65,    29,
-      69,    27
+       0,    15,    49,    46,     0,    50,     3,     4,    47,    51,
+      55,    51,    55,    16,    47,    57,    58,    46,    47,    53,
+      47,    46,    47,    57,    29,    47,    57,    31,    35,    54,
+      28,    47,    59,    66,    46,    34,    46,    47,    68,    47,
+      52,    32,    47,    60,     5,     7,     8,    12,    19,    20,
+      21,    30,    47,    67,    68,    35,    54,    54,    68,    34,
+      47,    51,    47,    55,    61,    60,    47,    51,     9,    32,
+      44,    45,    46,    68,    69,    29,    11,     5,    32,    32,
+      28,    47,    27,    34,    68,    35,    56,    55,    61,    39,
+      43,    47,    63,    33,    47,    47,    57,    69,    69,    35,
+      10,    22,    23,    24,    25,    26,    36,    37,    38,    39,
+      40,    41,    47,    70,    70,    29,    69,    68,    69,    69,
+      54,    34,    68,    54,    47,    63,    47,    53,    29,    33,
+      68,    70,    70,    69,    69,    69,    69,    69,    69,    69,
+      69,    69,    69,    29,    66,    70,    70,    33,    33,    28,
+      56,    34,    62,    66,    34,    69,    69,    66,    30,    66,
+      28,    28,    28,    54,    56,    28,    47,    64,    30,    56,
+      30,    13,    70,    47,    55,    64,    47,    70,    70,    30,
+      55,    63,    28,    69,    28,    53,     6,    65,    70,    64,
+      29,    66,    30,    70,    28
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_int8 yyr1[] =
 {
-       0,    47,    49,    48,    51,    50,    50,    50,    50,    52,
-      52,    52,    52,    53,    53,    53,    53,    53,    54,    54,
-      54,    54,    55,    55,    56,    56,    56,    56,    58,    57,
-      59,    59,    59,    59,    61,    60,    60,    60,    62,    62,
-      62,    62,    64,    63,    63,    63,    63,    65,    65,    65,
-      66,    66,    66,    66,    66,    66,    66,    66,    66,    67,
-      67,    67,    68,    68,    68,    68,    68,    68,    68,    68,
-      68,    68,    68,    68,    68,    68,    68,    68,    68,    68,
-      69
+       0,    48,    50,    49,    52,    51,    51,    51,    51,    53,
+      53,    53,    53,    54,    54,    54,    54,    54,    55,    55,
+      55,    55,    56,    56,    57,    57,    57,    57,    59,    58,
+      60,    60,    60,    60,    62,    61,    61,    61,    63,    63,
+      63,    63,    65,    64,    64,    64,    64,    66,    66,    66,
+      67,    67,    67,    67,    67,    67,    67,    67,    67,    68,
+      68,    68,    69,    69,    69,    69,    69,    69,    69,    69,
+      69,    69,    69,    69,    69,    69,    69,    69,    69,    69,
+      69,    70
 };
 
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
@@ -843,9 +846,9 @@ static const yytype_int8 yyr2[] =
        3,     0,     2,     2,     0,     5,     2,     2,     1,     1,
        2,     2,     0,     6,     2,     2,     0,     2,     0,     2,
        4,     8,     8,    15,     5,     2,     5,     5,     2,     1,
-       2,     2,     3,     3,     3,     3,     3,     3,     4,     2,
-       3,     3,     3,     3,     1,     1,     1,     3,     5,     2,
-       0
+       2,     2,     3,     3,     3,     3,     3,     3,     4,     4,
+       2,     3,     3,     3,     3,     1,     1,     1,     3,     5,
+       2,     0
 };
 
 
@@ -1541,139 +1544,128 @@ yyreduce:
   switch (yyn)
     {
   case 2:
-#line 89 "parser.y"
+#line 95 "parser.y"
           {
             codigo.anadirInstruccion("prog " + *(yyvsp[0].str) + ";");
           }
-#line 1549 "parser.cpp"
+#line 1552 "parser.cpp"
     break;
 
   case 3:
-#line 93 "parser.y"
+#line 99 "parser.y"
           {
             codigo.anadirInstruccion("halt;");
             codigo.escribir();
           }
-#line 1558 "parser.cpp"
+#line 1561 "parser.cpp"
     break;
 
   case 4:
-#line 99 "parser.y"
+#line 105 "parser.y"
               {
                 std::string estruct = (yyvsp[-1].list)->back();
                 int w = (yyvsp[-1].list)->size(),k;
-                // string str;
-                // stringstream ss;  
-                // ss << w;  
-                // ss >> str;  
-                // // for (int i = 0; i < w; i++){
-                // //   codigo.anadirInstruccion($2->back());
-                // //   $2->pop_back();
-                // // }
-                // codigo.anadirInstruccion(str);
-                // // codigo.anadirInstruccion($2->back());
+                /*CODIGO PARA COMPROBAR LO QUE CONTIENE EL ARRAY Y SU DIMENSION
+                string str;
+                stringstream ss;  
+                ss << w;  
+                ss >> str;  
+                for (int i = 0; i < w; i++){
+                  codigo.anadirInstruccion($2->back());
+                  $2->pop_back();
+                }
+                codigo.anadirInstruccion(str);*/
+                /*En realidad en vez de añadir como vairable cada procedimiento */
                 
-                //codigo.anadirInstruccion($2->back());
 
                 if (estruct == "Array"){
-                  
-                  
-                  //codigo.anadirInstruccion($2->back());
+                  // 5 posiciones de vector por cada array unidimensional + dimension del array
                   for ( k = 0; k < w; k = k + 5) {
+
+                    //Quito "Array" del vector
                     (yyvsp[-1].list)->pop_back();
                     int num;
                     stringstream ss1;  
                     ss1 << (yyvsp[-1].list)->back();  
                     ss1 >> num;
                     int numdim = num;
-                    
+
+                    //Quito el numero de dimensiones del vector
                     (yyvsp[-1].list)->pop_back();
-                    
-
-                    //En la cabeza A[i][b]
-                    //dimensiones ej. i b
-                    //identificador A
-                    //estruct Array
-                    
-                    //Que pasa si añado otro array concatenado?
-                    // se me añade 4 cosas al vector por declaracion
-                    
-
+ 
+                    //Creo procedimiento con el identificador
                     st.anadirProcedimiento((yyvsp[-1].list)->back());
-                    //codigo.anadirInstruccion($2->back());
                     std::string identificador = (yyvsp[-1].list)->back();
+                    //Quito el identificador del vector
                     (yyvsp[-1].list)->pop_back();
                     
-                    //Guardar parametros menos el front ya que es el identificador, cuidado valor de n
+                    //Guardamos parametros segun la dimension (dimension inicializada a 0 para mayor facilidad)
                     for (int i = 0; i < numdim + 1;i++){
-                      //codigo.anadirInstruccion($2->back());
                       st.anadirParametro(identificador,*(yyvsp[-2].str),*(yyvsp[-2].str));
                       (yyvsp[-1].list)->pop_back();
                     }
             
                     string str;
-                    int n1 = st.numArgsProcedimiento(identificador);
+                    //int n1 = st.numArgsProcedimiento(identificador);
 
                     stringstream ss;  
                     ss << k + numdim;  
                     ss >> str;  
-                    std::vector<std::string> decl;
-                    decl.push_back((yyvsp[-1].list)->back());
-                    
+
+                    //Nuevo vector para distinguir los arrays declarados en una misma linea
+                    std::vector<std::string> declarr;
+                    declarr.push_back((yyvsp[-1].list)->back());
+                    //Quito la declaracion del array del vector Ej: a[i]
                     (yyvsp[-1].list)->pop_back();
-                    
-                    
-                    //codigo.anadirInstruccion($2->back() + " " +str);
-                    codigo.anadirDeclaraciones(decl, *(yyvsp[-2].str));
+
+                    codigo.anadirDeclaraciones(declarr, *(yyvsp[-2].str));
                     
                     k = k + numdim ;
                   }
-                  //$2->pop_back();
-                  //stPila.empilar(st);
                 }
                 else{
-                  //n = n-1;
-                  //codigo.anadirInstruccion($2->back());
+                  codigo.anadirDeclaraciones(*(yyvsp[-1].list), *(yyvsp[-2].str));
                   for (int i = 0; i < w;i++){
                     //codigo.anadirInstruccion($2->back());
                     st.anadirVariable((yyvsp[-1].list)->back(),*(yyvsp[-2].str));
                     (yyvsp[-1].list)->pop_back();
                   }
                   //stPila.empilar(st);
-                  codigo.anadirDeclaraciones(*(yyvsp[-1].list), *(yyvsp[-2].str));
+                  //codigo.anadirDeclaraciones(*$2, *$1);
                 }
                 
               }
-#line 1648 "parser.cpp"
+#line 1639 "parser.cpp"
     break;
 
   case 9:
-#line 194 "parser.y"
+#line 188 "parser.y"
       {
         (yyval.list) = new vector<string>;
         (yyvsp[0].list)->push_back(*(yyvsp[-1].str));
         (yyval.list) = (yyvsp[0].list);
       }
-#line 1658 "parser.cpp"
+#line 1649 "parser.cpp"
     break;
 
   case 10:
-#line 200 "parser.y"
+#line 194 "parser.y"
       {
         (yyval.list) = new vector<string>;
         // Creamos un vector auxiliar del mismo tamaño que el vector de id de arrays
         int n = (yyvsp[-1].list)->size();
+        // Variable para detectar la dimension del array
         int numdim = 0;
         std::vector<string> aux(n+1);
         std::ostringstream oss;
-        //Guardamos en el vector auxiliar las dimensiones del array junto con su identificador 
+        // Guardamos en el vector auxiliar las dimensiones del array junto con su identificador 
         for (auto &auxi : *(yyvsp[-1].list)){
              aux.push_back("[" + auxi + "]");
              numdim++;
         }
         aux.push_back("[" + *(yyvsp[-3].str) + "]");
         
-        //Convertimos en string para que no haya problemas a la hora de mostrar por pantalla.
+        //Convertimos en string para que no haya problemas a la hora de mostrar la incializacion.
 
         std::copy(aux.rbegin(), aux.rend(),
         std::ostream_iterator<string>(oss));
@@ -1681,226 +1673,218 @@ yyreduce:
         //Insertamos en la lista de identificadores el identificador + dimensiones
         (yyvsp[0].list)->push_back(*(yyvsp[-5].str) + oss.str());
 
-        //codigo.anadirInstruccion($5->back());
-        //añadimos tipo de cada dimension a la cola
+        // añadimos parametro? de cada dimension al vector Ej: i,j,k...
         for (auto &auxi : *(yyvsp[-1].list)){
           (yyvsp[0].list)->push_back(auxi);
         }
+        // Añadimos el primer parametro?
         (yyvsp[0].list)->push_back(*(yyvsp[-3].str));
+        // Añadimos el identificador
         (yyvsp[0].list)->push_back(*(yyvsp[-5].str));
         string str;
-
         stringstream ss;  
         ss << numdim;  
         ss >> str;
+        // Añadimos la dimension del array y la palabra "Array" para diferencia de un int normal.
         (yyvsp[0].list)->push_back(str);
         (yyvsp[0].list)->push_back("Array");
-        //codigo.anadirInstruccion(str);
         (yyval.list) = (yyvsp[0].list);
 
       }
-#line 1703 "parser.cpp"
+#line 1695 "parser.cpp"
     break;
 
   case 11:
-#line 241 "parser.y"
+#line 236 "parser.y"
       {
-      (yyval.list) = new vector<string>;
-      (yyvsp[0].list)->push_back(*(yyvsp[-3].str) + *(yyvsp[-2].str) + *(yyvsp[-1].str));
-      (yyval.list) = (yyvsp[0].list);
+        (yyval.list) = new vector<string>;
+        (yyvsp[0].list)->push_back(*(yyvsp[-3].str) + *(yyvsp[-2].str) + *(yyvsp[-1].str));
+        (yyval.list) = (yyvsp[0].list);
       }
-#line 1713 "parser.cpp"
+#line 1705 "parser.cpp"
     break;
 
   case 13:
-#line 250 "parser.y"
+#line 245 "parser.y"
       {
       (yyval.list) = new vector<string>;
       (yyvsp[0].list)->push_back(*(yyvsp[-1].str));
       (yyval.list) = (yyvsp[0].list);
       }
-#line 1723 "parser.cpp"
+#line 1715 "parser.cpp"
     break;
 
   case 14:
-#line 256 "parser.y"
+#line 251 "parser.y"
       {
         (yyval.list) = new vector<string>;
-        // Creamos un vector auxiliar del mismo tamaño que el vector de id de arrays
         int n = (yyvsp[-1].list)->size();
         int numdim1 = 0;
         std::vector<string> aux(n+1);
         std::ostringstream oss;
-        //Guardamos en el vector auxiliar las dimensiones del array junto con su identificador 
+
         for (auto &auxi : *(yyvsp[-1].list)){
              aux.push_back("[" + auxi + "]");
              numdim1++;
         }
+
         aux.push_back("[" + *(yyvsp[-3].str) + "]");
-        
-        //Convertimos en string para que no haya problemas a la hora de mostrar por pantalla.
-
         std::copy(aux.rbegin(), aux.rend(),
-          std::ostream_iterator<string>(oss));
-
-        //Insertamos en la lista de identificadores el identificador + dimensiones
+        std::ostream_iterator<string>(oss));
         (yyvsp[0].list)->push_back(*(yyvsp[-5].str) + oss.str());
 
-        //codigo.anadirInstruccion($6->back());
-        //añadimos tipo de cada dimension a la cola
         for (auto &auxi : *(yyvsp[-1].list)){
           (yyvsp[0].list)->push_back(auxi);
         }
+
         (yyvsp[0].list)->push_back(*(yyvsp[-3].str));
         (yyvsp[0].list)->push_back(*(yyvsp[-5].str));
         string str;
-        
         stringstream ss;  
         ss << numdim1;  
         ss >> str;
         (yyvsp[0].list)->push_back(str);
         (yyvsp[0].list)->push_back("Array");
-        //codigo.anadirInstruccion(str);
         (yyval.list) = (yyvsp[0].list);
       }
-#line 1767 "parser.cpp"
+#line 1751 "parser.cpp"
     break;
 
   case 15:
-#line 296 "parser.y"
+#line 283 "parser.y"
       {
       (yyval.list) = new vector<string>;
       (yyvsp[0].list)->push_back(*(yyvsp[-4].str) + *(yyvsp[-2].str) + *(yyvsp[-1].str));
       (yyval.list) = (yyvsp[0].list);
       }
-#line 1777 "parser.cpp"
+#line 1761 "parser.cpp"
     break;
 
   case 16:
-#line 302 "parser.y"
+#line 289 "parser.y"
       {
       (yyval.list) = new vector<string>;
       *(yyval.list) = {};
       }
-#line 1786 "parser.cpp"
+#line 1770 "parser.cpp"
     break;
 
   case 18:
-#line 309 "parser.y"
+#line 296 "parser.y"
                 {*(yyval.str) = "ent";}
-#line 1792 "parser.cpp"
+#line 1776 "parser.cpp"
     break;
 
   case 19:
-#line 310 "parser.y"
+#line 297 "parser.y"
                {*(yyval.str) = "real";}
-#line 1798 "parser.cpp"
+#line 1782 "parser.cpp"
     break;
 
   case 22:
-#line 316 "parser.y"
+#line 303 "parser.y"
       {
         (yyval.list) = new vector<string>;
         (yyvsp[0].list)->push_back(*(yyvsp[-2].str));
         (yyval.list) = (yyvsp[0].list);
       }
-#line 1808 "parser.cpp"
+#line 1792 "parser.cpp"
     break;
 
   case 23:
-#line 322 "parser.y"
+#line 309 "parser.y"
       {
         (yyval.list) = new vector<string>;
         *(yyval.list) = {};
       }
-#line 1817 "parser.cpp"
+#line 1801 "parser.cpp"
     break;
 
   case 28:
-#line 336 "parser.y"
+#line 323 "parser.y"
                     {
                       codigo.anadirInstruccion("proc " + *(yyvsp[0].str) + ";");
                     }
-#line 1825 "parser.cpp"
+#line 1809 "parser.cpp"
     break;
 
   case 29:
-#line 340 "parser.y"
+#line 327 "parser.y"
                     {
                       codigo.anadirInstruccion("endproc;");
                     }
-#line 1833 "parser.cpp"
+#line 1817 "parser.cpp"
     break;
 
   case 34:
-#line 352 "parser.y"
+#line 339 "parser.y"
                 {
                   codigo.anadirParametros(*(yyvsp[0].list), *(yyvsp[-1].str), *(yyvsp[-2].str));
                 }
-#line 1841 "parser.cpp"
+#line 1825 "parser.cpp"
     break;
 
   case 38:
-#line 360 "parser.y"
+#line 347 "parser.y"
                     {(yyval.str) = (yyvsp[0].str);}
-#line 1847 "parser.cpp"
+#line 1831 "parser.cpp"
     break;
 
   case 39:
-#line 361 "parser.y"
+#line 348 "parser.y"
                     {(yyval.str) = (yyvsp[0].str);}
-#line 1853 "parser.cpp"
+#line 1837 "parser.cpp"
     break;
 
   case 42:
-#line 367 "parser.y"
+#line 354 "parser.y"
                     {
                       codigo.anadirParametros(*(yyvsp[0].list), *(yyvsp[-1].str), *(yyvsp[-2].str));
                     }
-#line 1861 "parser.cpp"
+#line 1845 "parser.cpp"
     break;
 
   case 47:
-#line 377 "parser.y"
+#line 364 "parser.y"
                       {
                         (yyval.numlist) = new numliststruct;
                         (yyval.numlist)->exit = *(unir((yyvsp[0].numlist)->exit, (yyvsp[-1].numlist)->exit));
                         (yyval.numlist)->skip = *(unir((yyvsp[0].numlist)->skip, (yyvsp[-1].numlist)->skip));
                       }
-#line 1871 "parser.cpp"
+#line 1855 "parser.cpp"
     break;
 
   case 48:
-#line 383 "parser.y"
+#line 370 "parser.y"
                       {
                         (yyval.numlist) = new numliststruct;
                       }
-#line 1879 "parser.cpp"
+#line 1863 "parser.cpp"
     break;
 
   case 50:
-#line 391 "parser.y"
+#line 378 "parser.y"
       { 
         codigo.anadirInstruccion(*(yyvsp[-3].str) + " := " + (yyvsp[-1].expr)->str + ";") ; 
         delete (yyvsp[-3].str) ; delete (yyvsp[-1].expr);
         (yyval.numlist) = new numliststruct;
       }
-#line 1889 "parser.cpp"
+#line 1873 "parser.cpp"
     break;
 
   case 51:
-#line 397 "parser.y"
+#line 384 "parser.y"
       { 
         codigo.completarInstrucciones((yyvsp[-6].expr)->trues, (yyvsp[-5].number));
         codigo.completarInstrucciones((yyvsp[-6].expr)->falses, (yyvsp[-1].number));
         //EXIT
         (yyval.numlist)->exit = (yyvsp[-3].numlist)->exit;
       }
-#line 1900 "parser.cpp"
+#line 1884 "parser.cpp"
     break;
 
   case 52:
-#line 404 "parser.y"
+#line 391 "parser.y"
       {
         (yyval.numlist) = new numliststruct;
         stringstream cadena;
@@ -1910,11 +1894,11 @@ yyreduce:
         codigo.completarInstrucciones((yyvsp[-3].numlist)->exit, (yyvsp[-2].number));
         (yyval.numlist)->exit = (yyvsp[-3].numlist)->exit;
       }
-#line 1914 "parser.cpp"
+#line 1898 "parser.cpp"
     break;
 
   case 53:
-#line 415 "parser.y"
+#line 402 "parser.y"
       { 
         (yyval.numlist) = new numliststruct;
         codigo.completarInstrucciones((yyvsp[-7].expr)->falses, (yyvsp[-12].number));
@@ -1926,74 +1910,65 @@ yyreduce:
         //FALTA EL SKIP
         codigo.completarInstrucciones((yyvsp[-11].numlist)->skip, (yyvsp[-8].number));
       }
-#line 1930 "parser.cpp"
+#line 1914 "parser.cpp"
     break;
 
   case 54:
-#line 427 "parser.y"
+#line 414 "parser.y"
       { 
         (yyval.numlist) = new numliststruct;
         codigo.completarInstrucciones((yyvsp[-2].expr)->falses, (yyvsp[-1].number));
         (yyval.numlist)->skip = (yyvsp[-2].expr)->trues;
         delete (yyvsp[-2].expr);
       }
-#line 1941 "parser.cpp"
+#line 1925 "parser.cpp"
     break;
 
   case 55:
-#line 434 "parser.y"
+#line 421 "parser.y"
       {
         (yyval.numlist) = new numliststruct;
         (yyval.numlist)->exit.push_back(codigo.obtenRef());
         codigo.anadirInstruccion("goto");
       }
-#line 1951 "parser.cpp"
+#line 1935 "parser.cpp"
     break;
 
   case 56:
-#line 440 "parser.y"
+#line 427 "parser.y"
       { 
         (yyval.numlist) = new numliststruct;
         codigo.anadirInstruccion("read " + *(yyvsp[-2].str) + ";");
       }
-#line 1960 "parser.cpp"
+#line 1944 "parser.cpp"
     break;
 
   case 57:
-#line 445 "parser.y"
+#line 432 "parser.y"
       { 
         (yyval.numlist) = new numliststruct;
         codigo.anadirInstruccion("write " + (yyvsp[-2].expr)->str + ";");
         codigo.anadirInstruccion("writeln;");
       }
-#line 1970 "parser.cpp"
+#line 1954 "parser.cpp"
     break;
 
   case 58:
-#line 451 "parser.y"
+#line 438 "parser.y"
       { 
         (yyval.numlist) = new numliststruct;
       }
-#line 1978 "parser.cpp"
+#line 1962 "parser.cpp"
     break;
 
   case 59:
-#line 457 "parser.y"
+#line 444 "parser.y"
           {(yyval.str) = (yyvsp[0].str);}
-#line 1984 "parser.cpp"
+#line 1968 "parser.cpp"
     break;
 
   case 62:
-#line 464 "parser.y"
-      { 
-        (yyval.expr) = new expresionstruct;
-        *(yyval.expr) = makecomparison((yyvsp[-2].expr)->str,*(yyvsp[-1].str),(yyvsp[0].expr)->str) ; 
-      }
-#line 1993 "parser.cpp"
-    break;
-
-  case 63:
-#line 469 "parser.y"
+#line 451 "parser.y"
       { 
         (yyval.expr) = new expresionstruct;
         if ((yyvsp[-2].expr)->arr.empty())
@@ -2001,60 +1976,99 @@ yyreduce:
         else
           *(yyval.expr) = makecomparison((yyvsp[-2].expr)->str,*(yyvsp[-1].str),(yyvsp[0].expr)->str,(yyvsp[-2].expr)->arr) ; 
       }
-#line 2005 "parser.cpp"
+#line 1980 "parser.cpp"
+    break;
+
+  case 63:
+#line 459 "parser.y"
+      { 
+        (yyval.expr) = new expresionstruct;
+        if ((yyvsp[-2].expr)->arr.empty())
+          *(yyval.expr) = makecomparison((yyvsp[-2].expr)->str,*(yyvsp[-1].str),(yyvsp[0].expr)->str) ; 
+        else
+          *(yyval.expr) = makecomparison((yyvsp[-2].expr)->str,*(yyvsp[-1].str),(yyvsp[0].expr)->str,(yyvsp[-2].expr)->arr) ; 
+      }
+#line 1992 "parser.cpp"
     break;
 
   case 64:
-#line 477 "parser.y"
+#line 467 "parser.y"
       { 
         (yyval.expr) = new expresionstruct;
-        *(yyval.expr) = makecomparison((yyvsp[-2].expr)->str,*(yyvsp[-1].str),(yyvsp[0].expr)->str) ;    
+        if ((yyvsp[-2].expr)->arr.empty())
+          *(yyval.expr) = makecomparison((yyvsp[-2].expr)->str,*(yyvsp[-1].str),(yyvsp[0].expr)->str) ; 
+        else
+          *(yyval.expr) = makecomparison((yyvsp[-2].expr)->str,*(yyvsp[-1].str),(yyvsp[0].expr)->str,(yyvsp[-2].expr)->arr) ; 
       }
-#line 2014 "parser.cpp"
+#line 2004 "parser.cpp"
     break;
 
   case 65:
-#line 482 "parser.y"
+#line 475 "parser.y"
       { 
         (yyval.expr) = new expresionstruct;
-        *(yyval.expr) = makecomparison((yyvsp[-2].expr)->str,*(yyvsp[-1].str),(yyvsp[0].expr)->str) ; 
+        if ((yyvsp[-2].expr)->arr.empty())
+          *(yyval.expr) = makecomparison((yyvsp[-2].expr)->str,*(yyvsp[-1].str),(yyvsp[0].expr)->str) ; 
+        else
+          *(yyval.expr) = makecomparison((yyvsp[-2].expr)->str,*(yyvsp[-1].str),(yyvsp[0].expr)->str,(yyvsp[-2].expr)->arr) ; 
       }
-#line 2023 "parser.cpp"
+#line 2016 "parser.cpp"
     break;
 
   case 66:
-#line 487 "parser.y"
+#line 483 "parser.y"
       { 
         (yyval.expr) = new expresionstruct;
-        *(yyval.expr) = makecomparison((yyvsp[-2].expr)->str,*(yyvsp[-1].str),(yyvsp[0].expr)->str) ; 
+        if ((yyvsp[-2].expr)->arr.empty())
+          *(yyval.expr) = makecomparison((yyvsp[-2].expr)->str,*(yyvsp[-1].str),(yyvsp[0].expr)->str) ; 
+        else
+          *(yyval.expr) = makecomparison((yyvsp[-2].expr)->str,*(yyvsp[-1].str),(yyvsp[0].expr)->str,(yyvsp[-2].expr)->arr) ; 
       }
-#line 2032 "parser.cpp"
+#line 2028 "parser.cpp"
     break;
 
   case 67:
-#line 492 "parser.y"
+#line 491 "parser.y"
       { 
         (yyval.expr) = new expresionstruct;
-        *(yyval.expr) = makecomparison((yyvsp[-2].expr)->str,*(yyvsp[-1].str),(yyvsp[0].expr)->str) ; 
+        if ((yyvsp[-2].expr)->arr.empty())
+          *(yyval.expr) = makecomparison((yyvsp[-2].expr)->str,*(yyvsp[-1].str),(yyvsp[0].expr)->str) ; 
+        else
+          *(yyval.expr) = makecomparison((yyvsp[-2].expr)->str,*(yyvsp[-1].str),(yyvsp[0].expr)->str,(yyvsp[-2].expr)->arr) ; 
       }
-#line 2041 "parser.cpp"
+#line 2040 "parser.cpp"
     break;
 
   case 68:
-#line 497 "parser.y"
+#line 499 "parser.y"
       {
         (yyval.expr) = new expresionstruct;
         expresionstruct tmp;
         codigo.completarInstrucciones((yyvsp[-3].expr)->falses, (yyvsp[-1].number));
         tmp.trues = *(unir((yyvsp[-3].expr)->trues, (yyvsp[0].expr)->trues));
         tmp.falses = (yyvsp[0].expr)->falses;
+        //codigo.anadirInstruccion(tmp.trues.front()+ " " + tmp.falses.front());
         *(yyval.expr) = tmp;
       }
 #line 2054 "parser.cpp"
     break;
 
   case 69:
-#line 506 "parser.y"
+#line 509 "parser.y"
+      {
+        (yyval.expr) = new expresionstruct;
+        expresionstruct tmp;
+        codigo.completarInstrucciones((yyvsp[-3].expr)->trues, (yyvsp[-1].number));
+        tmp.trues = (yyvsp[0].expr)->trues;
+        tmp.falses = *(unir((yyvsp[-3].expr)->falses, (yyvsp[0].expr)->falses));
+        //codigo.anadirInstruccion(tmp.trues.front()+ " " + tmp.falses.front());
+        *(yyval.expr) = tmp;
+      }
+#line 2068 "parser.cpp"
+    break;
+
+  case 70:
+#line 519 "parser.y"
       {
         (yyval.expr) = new expresionstruct;
         expresionstruct tmp;
@@ -2062,151 +2076,114 @@ yyreduce:
         tmp.falses = (yyvsp[0].expr)->trues;
         *(yyval.expr) = tmp;
       }
-#line 2066 "parser.cpp"
-    break;
-
-  case 70:
-#line 514 "parser.y"
-      { 
-        (yyval.expr) = new expresionstruct;
-        *(yyval.expr) = makearithmetic((yyvsp[-2].expr)->str,*(yyvsp[-1].str),(yyvsp[0].expr)->str) ;
-      }
-#line 2075 "parser.cpp"
+#line 2080 "parser.cpp"
     break;
 
   case 71:
-#line 519 "parser.y"
+#line 527 "parser.y"
       { 
         (yyval.expr) = new expresionstruct;
         *(yyval.expr) = makearithmetic((yyvsp[-2].expr)->str,*(yyvsp[-1].str),(yyvsp[0].expr)->str) ;
       }
-#line 2084 "parser.cpp"
+#line 2089 "parser.cpp"
     break;
 
   case 72:
-#line 524 "parser.y"
+#line 532 "parser.y"
+      { 
+        (yyval.expr) = new expresionstruct;
+        *(yyval.expr) = makearithmetic((yyvsp[-2].expr)->str,*(yyvsp[-1].str),(yyvsp[0].expr)->str) ;
+      }
+#line 2098 "parser.cpp"
+    break;
+
+  case 73:
+#line 537 "parser.y"
       { 
         (yyval.expr) = new expresionstruct;
         *(yyval.expr) = makearithmetic((yyvsp[-2].expr)->str,*(yyvsp[-1].str),(yyvsp[0].expr)->str) ; 
       }
-#line 2093 "parser.cpp"
+#line 2107 "parser.cpp"
     break;
 
-  case 73:
-#line 529 "parser.y"
+  case 74:
+#line 542 "parser.y"
       { 
         (yyval.expr) = new expresionstruct;
         *(yyval.expr) = makearithmetic((yyvsp[-2].expr)->str,*(yyvsp[-1].str),(yyvsp[0].expr)->str) ;
       }
-#line 2102 "parser.cpp"
+#line 2116 "parser.cpp"
     break;
 
-  case 74:
-#line 534 "parser.y"
+  case 75:
+#line 547 "parser.y"
       { 
         (yyval.expr) = new expresionstruct; 
 
         (yyval.expr)->str = *(yyvsp[0].str);
       }
-#line 2112 "parser.cpp"
-    break;
-
-  case 75:
-#line 540 "parser.y"
-      { (yyval.expr) = new expresionstruct; (yyval.expr)->str = *(yyvsp[0].str); }
-#line 2118 "parser.cpp"
+#line 2126 "parser.cpp"
     break;
 
   case 76:
-#line 542 "parser.y"
+#line 553 "parser.y"
       { (yyval.expr) = new expresionstruct; (yyval.expr)->str = *(yyvsp[0].str); }
-#line 2124 "parser.cpp"
+#line 2132 "parser.cpp"
     break;
 
   case 77:
-#line 544 "parser.y"
-      { (yyval.expr) = new expresionstruct; (yyval.expr)->str = (yyvsp[-1].expr)->str; }
-#line 2130 "parser.cpp"
+#line 555 "parser.y"
+      { (yyval.expr) = new expresionstruct; (yyval.expr)->str = *(yyvsp[0].str); }
+#line 2138 "parser.cpp"
     break;
 
   case 78:
-#line 546 "parser.y"
-      { 
-        // $$ = new expresionstruct; 
-        // // Creamos un vector auxiliar del mismo tamaño que el vector de id de arrays
-        // int n = $2->size();
-        // std::vector<string> aux(n);
-        // std::ostringstream oss;
-        // //Guardamos en el vector auxiliar las dimensiones del array junto con su identificador 
-        // for (auto &auxi : *$2){
-        //      aux.push_back("[" + auxi + "]");
-        // }
-        // //Convertimos en string para que no haya problemas a la hora de mostrar por pantalla.
-        // std::copy(aux.rbegin(), aux.rend(),
-        //   std::ostream_iterator<string>(oss));
-        
-        // //int n = st.numArgsProcedimiento(identificador);
-        // string str;
-        
-        // stringstream ss;  
-        // ss << n;  
-        // ss >> str;
+#line 557 "parser.y"
+      { (yyval.expr) = new expresionstruct; (yyval.expr)->str = (yyvsp[-1].expr)->str; }
+#line 2144 "parser.cpp"
+    break;
 
-        // //codigo.anadirInstruccion(str);
-        // for (auto &auxi : *$2){
-        //   $$->arr.push_back(auxi);
-        // }
-        // $$->arr.push_back(*$1);
-        // $$->str = *$1 + oss.str();
-        
+  case 79:
+#line 559 "parser.y"
+      { 
         (yyval.expr) = new expresionstruct;
-        // Creamos un vector auxiliar del mismo tamaño que el vector de id de arrays
         int n = (yyvsp[0].list)->size();
         std::vector<string> aux(n+1);
         std::ostringstream oss;
-        //Guardamos en el vector auxiliar las dimensiones del array junto con su identificador 
+
         for (auto &auxi : *(yyvsp[0].list)){
              aux.push_back("[" + auxi + "]");
         }
+
         aux.push_back("[" + *(yyvsp[-2].str) + "]");
-        
-        //Convertimos en string para que no haya problemas a la hora de mostrar por pantalla.
-
         std::copy(aux.rbegin(), aux.rend(),
-          std::ostream_iterator<string>(oss));
-          
-        //Insertamos en la lista de identificadores el identificador + dimensiones
-        
+        std::ostream_iterator<string>(oss));
 
-        //codigo.anadirInstruccion($5->back());
-        //añadimos tipo de cada dimension a la cola
         for (auto &auxi : *(yyvsp[0].list)){
           (yyval.expr)->arr.push_back(auxi);
         }
+        
         (yyval.expr)->arr.push_back(*(yyvsp[-2].str));
         (yyval.expr)->arr.push_back(*(yyvsp[-4].str));
         string str;
-        
         stringstream ss;  
         ss << n;  
         ss >> str;
 
-        //codigo.anadirInstruccion(str);
-
         (yyval.expr)->str = *(yyvsp[-4].str) + oss.str();
 
       }
-#line 2200 "parser.cpp"
+#line 2177 "parser.cpp"
     break;
 
-  case 80:
-#line 614 "parser.y"
+  case 81:
+#line 590 "parser.y"
           { (yyval.number) = codigo.obtenRef() ; }
-#line 2206 "parser.cpp"
+#line 2183 "parser.cpp"
     break;
 
 
-#line 2210 "parser.cpp"
+#line 2187 "parser.cpp"
 
       default: break;
     }
@@ -2438,12 +2415,13 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 617 "parser.y"
+#line 593 "parser.y"
 
 std::string tipoNum(const string& str)
 {
   std::string::size_type sz;
   std::stoi (str,&sz);
+
   if (str.substr(sz) == ".") {
     return "real";
   }
@@ -2452,6 +2430,7 @@ std::string tipoNum(const string& str)
   }
 }
 
+//Comparacion para arrays
 expresionstruct makecomparison(std::string &s1, std::string &s2, std::string &s3, std::vector<std::string> &s4) {
   expresionstruct tmp ; 
   int n,x;
@@ -2469,6 +2448,7 @@ expresionstruct makecomparison(std::string &s1, std::string &s2, std::string &s3
     n = st.numArgsProcedimiento(s4.back());
 
     std::pair <std::string,std::string> argumento = st.obtenerTiposParametro(s4.back(),0); 
+    //codigo.anadirInstruccion(s3 + " 1");
     if (argumento.second != tipoNum(s3)){
       //codigo.anadirInstruccion(argumento.second + " " + tipoNum(s3));
       codigo.anadirInstruccion("Las variables no concuerdan en tipo");
@@ -2485,11 +2465,9 @@ expresionstruct makecomparison(std::string &s1, std::string &s2, std::string &s3
   return tmp ;
 }
 
+//Comparacion para variables comunes
 expresionstruct makecomparison(std::string &s1, std::string &s2, std::string &s3) {
   expresionstruct tmp ; 
-
-  
-
 
   tmp.trues.push_back(codigo.obtenRef()) ;
   codigo.anadirInstruccion("if " + s1 + s2 + s3 + " goto") ;
@@ -2498,6 +2476,7 @@ expresionstruct makecomparison(std::string &s1, std::string &s2, std::string &s3
   }
   else {
     std::string tipodevar = st.obtenerTipo(s1);
+    //codigo.anadirInstruccion(s3 + " 2");
     if (tipodevar != tipoNum(s3)){
        codigo.anadirInstruccion("Las variables no concuerdan en tipo");
     }
@@ -2512,18 +2491,47 @@ expresionstruct makecomparison(std::string &s1, std::string &s2, std::string &s3
 
 expresionstruct makearithmetic(std::string &s1, std::string &s2, std::string &s3) {
   expresionstruct tmp ; 
-  // if (!st.existeId(s1)){
-  //   codigo.anadirInstruccion("El identificador no esta definido");
-  // }
-  // else {
-  //   std::string tipodevar = st.obtenerTipo(s1);
-  //   if (tipodevar != tipoNum(s3)){
-  //      codigo.anadirInstruccion("Las variables no concuerdan en tipo");
-  //   }
-  // }
 
   tmp.str = codigo.nuevoId() ;
   codigo.anadirInstruccion(tmp.str + ":=" + s1 + s2 + s3 + ";") ;
+  /*Problemas:
+    s1 puede ser una variable temporal
+    s3 puede ser otra variable temporal
+  Soluciones:
+    Si s1 es temporal vamos a suponer que tiene el mismo tipo que s3
+  Importante los dos no pueden ser a la vez temporales s1 y s3, si no existe s1 s3 tiene que existir
+    */
+ 
+
+  if(!st.existeId(s1)){
+    //s1 se trata de una variable temporal o no esta declarada
+    codigo.anadirInstruccion("El identificador de arriba no esta definido");
+  }
+  else {
+    //codigo.anadirInstruccion(s1) ;
+    std::string tipodevar = st.obtenerTipo(s1);
+
+    if(!st.existeId(s3)){
+      //codigo.anadirInstruccion("Hey1") ;
+      //Si s1 o s3 no estan definidos no funcionara nada
+      //codigo.anadirInstruccion("El identificador de arriba no esta definido");
+      //s3 es una variable temporal
+      if(tipodevar != tipoNum(s3)){
+         codigo.anadirInstruccion("Las variables no concuerdan en tipo");
+      }
+    }
+    else{
+      std::string tipodevar2 = st.obtenerTipo(s3);
+      if(tipodevar != tipodevar2){
+         codigo.anadirInstruccion("Las variables no concuerdan en tipo: " + tipodevar + ", " + tipodevar2);
+         //Aun sabiendo que no concuerdan en tipo s1 y s3 le damos a la variable temporal el tipo de s1
+         st.anadirVariable(tmp.str,st.obtenerTipo(s1));
+      }
+      else{
+         st.anadirVariable(tmp.str,st.obtenerTipo(s1));
+      }
+    }
+  }
   return tmp ;
 }
 

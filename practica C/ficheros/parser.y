@@ -1,6 +1,15 @@
 %error-verbose
 
 %{
+  /*TODO: 
+    - Llamadas a procedimientos?
+    - Arreglar arrays no deben tener un identificador dentro a la hora de declarar sino un int o float
+      - Mantener estructura 
+      - Modificar que como paramentros añada el integer a str
+      - Necesario comprobar el valor maximo del array? -> 
+        -> Se puede añadir como parametro 0 el valor maximo y simplemente es un if
+    - Realizar ETDS :_(
+  */
    #include <stdio.h>
    #include <iostream>
    #include <vector>
@@ -20,8 +29,6 @@
    expresionstruct makecomparison(std::string &s1, std::string &s2, std::string &s3) ;
    expresionstruct makecomparison(std::string &s1, std::string &s2, std::string &s3, std::vector<std::string> &s4) ;
    expresionstruct makearithmetic(std::string &s1, std::string &s2, std::string &s3) ;
-
-   //TODO: Añadir restricciones semanticas para makearithmetic
 
    vector<int> *unir(vector<int> lis1, vector<int> lis2);
    
@@ -48,7 +55,7 @@
 /* 
    declaración de tokens. Esto debe coincidir con tokens.l 
 */
-%token <str> RINTEGER RFLOAT RIF RELSE RDO RWHILE RNOT RFOREVER RENDREPEAT RUNTIL RENDPROGRAM RPROGRAM RPROCEDURE RIN ROUT RREAD RPRINTLN REXIT ROR
+%token <str> RINTEGER RFLOAT RIF RELSE RDO RWHILE RNOT RAND RFOREVER RENDREPEAT RUNTIL RENDPROGRAM RPROGRAM RPROCEDURE RIN ROUT RREAD RPRINTLN REXIT ROR
 %token <str> TMUL TDIV TPLUS TMINUS TASSIG 
 %token <str> TSEMIC TLBRACE TRBRACE TCOMMA TLPAREN TRPAREN TRCOR TLCOR
 %token <str> TEQUAL TNOTEQ TLESS TLESSEQ TGREATER TGREATEREQ
@@ -79,9 +86,11 @@
 %type <numlist> lista_de_sentencias
 %type <numlist> sentencia
 
-%left TEQUAL TNOTEQ TLESS TLESSEQ TGREATER TGREATEREQ ROR RNOT
+%left ROR RAND RNOT
+%left TEQUAL TNOTEQ TLESS TLESSEQ TGREATER TGREATEREQ 
 %left TPLUS TMINUS
 %left TMUL TDIV
+
 
 %start programa
 
@@ -101,17 +110,19 @@ declaraciones :  tipo lista_de_ident TSEMIC
               {
                 std::string estruct = $2->back();
                 int w = $2->size(),k;
-                /* CODIGO PARA COMPROBAR LO QUE CONTIENE EL ARRAY Y SU DIMENSION
-                // string str;
-                // stringstream ss;  
-                // ss << w;  
-                // ss >> str;  
-                // // for (int i = 0; i < w; i++){
-                // //   codigo.anadirInstruccion($2->back());
-                // //   $2->pop_back();
-                // // }
-                // codigo.anadirInstruccion(str);
-                */
+                /*CODIGO PARA COMPROBAR LO QUE CONTIENE EL ARRAY Y SU DIMENSION
+                string str;
+                stringstream ss;  
+                ss << w;  
+                ss >> str;  
+                for (int i = 0; i < w; i++){
+                  codigo.anadirInstruccion($2->back());
+                  $2->pop_back();
+                }
+                codigo.anadirInstruccion(str);*/
+                /*En realidad en vez de añadir como vairable cada procedimiento */
+                
+
                 if (estruct == "Array"){
                   // 5 posiciones de vector por cada array unidimensional + dimension del array
                   for ( k = 0; k < w; k = k + 5) {
@@ -126,7 +137,7 @@ declaraciones :  tipo lista_de_ident TSEMIC
 
                     //Quito el numero de dimensiones del vector
                     $2->pop_back();
-
+ 
                     //Creo procedimiento con el identificador
                     st.anadirProcedimiento($2->back());
                     std::string identificador = $2->back();
@@ -140,30 +151,32 @@ declaraciones :  tipo lista_de_ident TSEMIC
                     }
             
                     string str;
-                    int n1 = st.numArgsProcedimiento(identificador);
+                    //int n1 = st.numArgsProcedimiento(identificador);
 
                     stringstream ss;  
                     ss << k + numdim;  
                     ss >> str;  
 
                     //Nuevo vector para distinguir los arrays declarados en una misma linea
-                    std::vector<std::string> decl;
-                    decl.push_back($2->back());
+                    std::vector<std::string> declarr;
+                    declarr.push_back($2->back());
                     //Quito la declaracion del array del vector Ej: a[i]
                     $2->pop_back();
 
-                    codigo.anadirDeclaraciones(decl, *$1);
+                    codigo.anadirDeclaraciones(declarr, *$1);
                     
                     k = k + numdim ;
                   }
                 }
                 else{
+                  codigo.anadirDeclaraciones(*$2, *$1);
                   for (int i = 0; i < w;i++){
+                    //codigo.anadirInstruccion($2->back());
                     st.anadirVariable($2->back(),*$1);
                     $2->pop_back();
                   }
                   //stPila.empilar(st);
-                  codigo.anadirDeclaraciones(*$2, *$1);
+                  //codigo.anadirDeclaraciones(*$2, *$1);
                 }
                 
               }
@@ -226,9 +239,9 @@ lista_de_ident : TIDENTIFIER resto_lista_id
       }
       | TIDENTIFIER TLCOR TRCOR resto_lista_id
       {
-      $$ = new vector<string>;
-      $4->push_back(*$1 + *$2 + *$3);
-      $$ = $4;
+        $$ = new vector<string>;
+        $4->push_back(*$1 + *$2 + *$3);
+        $$ = $4;
       }
       | lista_de_ident TCOMMENT
       ;
@@ -442,7 +455,10 @@ variable : TIDENTIFIER
 expresion : expresion TEQUAL expresion
       { 
         $$ = new expresionstruct;
-        *$$ = makecomparison($1->str,*$2,$3->str) ; 
+        if ($1->arr.empty())
+          *$$ = makecomparison($1->str,*$2,$3->str) ; 
+        else
+          *$$ = makecomparison($1->str,*$2,$3->str,$1->arr) ; 
       }
       | expresion TGREATER expresion
       { 
@@ -455,22 +471,34 @@ expresion : expresion TEQUAL expresion
       | expresion TLESS expresion
       { 
         $$ = new expresionstruct;
-        *$$ = makecomparison($1->str,*$2,$3->str) ;    
+        if ($1->arr.empty())
+          *$$ = makecomparison($1->str,*$2,$3->str) ; 
+        else
+          *$$ = makecomparison($1->str,*$2,$3->str,$1->arr) ; 
       }
       | expresion TGREATEREQ expresion
       { 
         $$ = new expresionstruct;
-        *$$ = makecomparison($1->str,*$2,$3->str) ; 
+        if ($1->arr.empty())
+          *$$ = makecomparison($1->str,*$2,$3->str) ; 
+        else
+          *$$ = makecomparison($1->str,*$2,$3->str,$1->arr) ; 
       }
       | expresion TLESSEQ expresion
       { 
         $$ = new expresionstruct;
-        *$$ = makecomparison($1->str,*$2,$3->str) ; 
+        if ($1->arr.empty())
+          *$$ = makecomparison($1->str,*$2,$3->str) ; 
+        else
+          *$$ = makecomparison($1->str,*$2,$3->str,$1->arr) ; 
       }
       | expresion TNOTEQ expresion
       { 
         $$ = new expresionstruct;
-        *$$ = makecomparison($1->str,*$2,$3->str) ; 
+        if ($1->arr.empty())
+          *$$ = makecomparison($1->str,*$2,$3->str) ; 
+        else
+          *$$ = makecomparison($1->str,*$2,$3->str,$1->arr) ; 
       }
       | expresion ROR M expresion
       {
@@ -479,6 +507,17 @@ expresion : expresion TEQUAL expresion
         codigo.completarInstrucciones($1->falses, $3);
         tmp.trues = *(unir($1->trues, $4->trues));
         tmp.falses = $4->falses;
+        //codigo.anadirInstruccion(tmp.trues.front()+ " " + tmp.falses.front());
+        *$$ = tmp;
+      }
+      | expresion RAND M expresion
+      {
+        $$ = new expresionstruct;
+        expresionstruct tmp;
+        codigo.completarInstrucciones($1->trues, $3);
+        tmp.trues = $4->trues;
+        tmp.falses = *(unir($1->falses, $4->falses));
+        //codigo.anadirInstruccion(tmp.trues.front()+ " " + tmp.falses.front());
         *$$ = tmp;
       }
       | RNOT expresion
@@ -561,6 +600,7 @@ std::string tipoNum(const string& str)
 {
   std::string::size_type sz;
   std::stoi (str,&sz);
+
   if (str.substr(sz) == ".") {
     return "real";
   }
@@ -569,6 +609,7 @@ std::string tipoNum(const string& str)
   }
 }
 
+//Comparacion para arrays
 expresionstruct makecomparison(std::string &s1, std::string &s2, std::string &s3, std::vector<std::string> &s4) {
   expresionstruct tmp ; 
   int n,x;
@@ -586,6 +627,7 @@ expresionstruct makecomparison(std::string &s1, std::string &s2, std::string &s3
     n = st.numArgsProcedimiento(s4.back());
 
     std::pair <std::string,std::string> argumento = st.obtenerTiposParametro(s4.back(),0); 
+    //codigo.anadirInstruccion(s3 + " 1");
     if (argumento.second != tipoNum(s3)){
       //codigo.anadirInstruccion(argumento.second + " " + tipoNum(s3));
       codigo.anadirInstruccion("Las variables no concuerdan en tipo");
@@ -602,11 +644,9 @@ expresionstruct makecomparison(std::string &s1, std::string &s2, std::string &s3
   return tmp ;
 }
 
+//Comparacion para variables comunes
 expresionstruct makecomparison(std::string &s1, std::string &s2, std::string &s3) {
   expresionstruct tmp ; 
-
-  
-
 
   tmp.trues.push_back(codigo.obtenRef()) ;
   codigo.anadirInstruccion("if " + s1 + s2 + s3 + " goto") ;
@@ -615,6 +655,7 @@ expresionstruct makecomparison(std::string &s1, std::string &s2, std::string &s3
   }
   else {
     std::string tipodevar = st.obtenerTipo(s1);
+    //codigo.anadirInstruccion(s3 + " 2");
     if (tipodevar != tipoNum(s3)){
        codigo.anadirInstruccion("Las variables no concuerdan en tipo");
     }
@@ -629,18 +670,47 @@ expresionstruct makecomparison(std::string &s1, std::string &s2, std::string &s3
 
 expresionstruct makearithmetic(std::string &s1, std::string &s2, std::string &s3) {
   expresionstruct tmp ; 
-  // if (!st.existeId(s1)){
-  //   codigo.anadirInstruccion("El identificador no esta definido");
-  // }
-  // else {
-  //   std::string tipodevar = st.obtenerTipo(s1);
-  //   if (tipodevar != tipoNum(s3)){
-  //      codigo.anadirInstruccion("Las variables no concuerdan en tipo");
-  //   }
-  // }
 
   tmp.str = codigo.nuevoId() ;
   codigo.anadirInstruccion(tmp.str + ":=" + s1 + s2 + s3 + ";") ;
+  /*Problemas:
+    s1 puede ser una variable temporal
+    s3 puede ser otra variable temporal
+  Soluciones:
+    Si s1 es temporal vamos a suponer que tiene el mismo tipo que s3
+  Importante los dos no pueden ser a la vez temporales s1 y s3, si no existe s1 s3 tiene que existir
+    */
+ 
+
+  if(!st.existeId(s1)){
+    //s1 se trata de una variable temporal o no esta declarada
+    codigo.anadirInstruccion("El identificador de arriba no esta definido");
+  }
+  else {
+    //codigo.anadirInstruccion(s1) ;
+    std::string tipodevar = st.obtenerTipo(s1);
+
+    if(!st.existeId(s3)){
+      //codigo.anadirInstruccion("Hey1") ;
+      //Si s1 o s3 no estan definidos no funcionara nada
+      //codigo.anadirInstruccion("El identificador de arriba no esta definido");
+      //s3 es una variable temporal
+      if(tipodevar != tipoNum(s3)){
+         codigo.anadirInstruccion("Las variables no concuerdan en tipo");
+      }
+    }
+    else{
+      std::string tipodevar2 = st.obtenerTipo(s3);
+      if(tipodevar != tipodevar2){
+         codigo.anadirInstruccion("Las variables no concuerdan en tipo: " + tipodevar + ", " + tipodevar2);
+         //Aun sabiendo que no concuerdan en tipo s1 y s3 le damos a la variable temporal el tipo de s1
+         st.anadirVariable(tmp.str,st.obtenerTipo(s1));
+      }
+      else{
+         st.anadirVariable(tmp.str,st.obtenerTipo(s1));
+      }
+    }
+  }
   return tmp ;
 }
 
