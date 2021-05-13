@@ -80,6 +80,7 @@
 %type <str> clase_par
 %type <str> resto_lis_de_param
 %type <str> variable
+%type <list> array_int
 %type <list> array_id
 %type <expr> expresion
 %type <number> M
@@ -121,7 +122,6 @@ declaraciones :  tipo lista_de_ident TSEMIC
                 }
                 codigo.anadirInstruccion(str);*/
                 /*En realidad en vez de añadir como vairable cada procedimiento */
-                
 
                 if (estruct == "Array"){
                   // 5 posiciones de vector por cada array unidimensional + dimension del array
@@ -195,10 +195,11 @@ lista_de_ident : TIDENTIFIER resto_lista_id
         $2->push_back(*$1);
         $$ = $2;
       }
-      | TIDENTIFIER TLCOR variable TRCOR array_id resto_lista_id
+      | TIDENTIFIER TLCOR TINTEGER TRCOR array_int resto_lista_id
       {
+        
         $$ = new vector<string>;
-        // Creamos un vector auxiliar del mismo tamaño que el vector de id de arrays
+        // Creamos un vector auxiliar del mismo tamaño que el vector de int de arrays
         int n = $5->size();
         // Variable para detectar la dimension del array
         int numdim = 0;
@@ -219,7 +220,7 @@ lista_de_ident : TIDENTIFIER resto_lista_id
         //Insertamos en la lista de identificadores el identificador + dimensiones
         $6->push_back(*$1 + oss.str());
 
-        // añadimos parametro? de cada dimension al vector Ej: i,j,k...
+        // añadimos tamaño de cada dimension al vector Ej: 17,25...
         for (auto &auxi : *$5){
           $6->push_back(auxi);
         }
@@ -252,7 +253,7 @@ resto_lista_id : TCOMMA TIDENTIFIER resto_lista_id
       $3->push_back(*$2);
       $$ = $3;
       }
-      | TCOMMA TIDENTIFIER TLCOR variable TRCOR array_id resto_lista_id
+      | TCOMMA TIDENTIFIER TLCOR TINTEGER TRCOR array_int resto_lista_id
       {
         $$ = new vector<string>;
         int n = $6->size();
@@ -304,7 +305,25 @@ tipo : RINTEGER {*$$ = "ent";}
       | tipo TCOMMENT
       ;
 
-array_id : TLCOR variable TRCOR array_id 
+array_int : TLCOR TINTEGER TRCOR array_int
+      {
+        $$ = new vector<string>;
+        $4->push_back(*$2);
+        $$ = $4;
+      }
+      | %empty
+      {
+        $$ = new vector<string>;
+        *$$ = {};
+      }
+      ;
+array_id : TLCOR variable TRCOR array_id
+      {
+        $$ = new vector<string>;
+        $4->push_back(*$2);
+        $$ = $4;
+      }
+      | TLCOR TINTEGER TRCOR array_int array_id
       {
         $$ = new vector<string>;
         $4->push_back(*$2);
@@ -560,7 +579,7 @@ expresion : expresion TEQUAL expresion
       { $$ = new expresionstruct; $$->str = *$1; }
       | TLPAREN expresion TRPAREN
       { $$ = new expresionstruct; $$->str = $2->str; }
-      | TIDENTIFIER TLCOR variable TRCOR array_id
+      | TIDENTIFIER TLCOR TINTEGER TRCOR array_id
       { 
         $$ = new expresionstruct;
         int n = $5->size();
@@ -589,6 +608,35 @@ expresion : expresion TEQUAL expresion
         $$->str = *$1 + oss.str();
 
       }
+      | TIDENTIFIER TLCOR variable TRCOR array_id
+      { 
+        $$ = new expresionstruct;
+        int n = $5->size();
+        std::vector<string> aux(n+1);
+        std::ostringstream oss;
+
+        for (auto &auxi : *$5){
+             aux.push_back("[" + auxi + "]");
+        }
+
+        aux.push_back("[" + *$3 + "]");
+        std::copy(aux.rbegin(), aux.rend(),
+        std::ostream_iterator<string>(oss));
+        
+        for (auto &auxi : *$5){
+          $$->arr.push_back(auxi);
+        }
+        
+        $$->arr.push_back(*$3);
+        $$->arr.push_back(*$1);
+        string str;
+        stringstream ss;  
+        ss << n;  
+        ss >> str;
+
+        $$->str = *$1 + oss.str();
+
+      }
       | expresion TCOMMENT
       ;
 
@@ -600,40 +648,64 @@ std::string tipoNum(const string& str)
 {
   std::string::size_type sz;
   std::stoi (str,&sz);
-
-  if (str.substr(sz) == ".") {
-    return "real";
-  }
-  else{
+  //codigo.anadirInstruccion(str.substr(sz));
+  if (sz == str.length()) {
     return "ent";
   }
+  else{
+    return "real";
+  }
+}
+bool es_numero(const std::string& s)
+{
+    std::string::const_iterator it = s.begin();
+    while (it != s.end() && std::isdigit(*it)) ++it;
+    return !s.empty() && it == s.end();
 }
 
 //Comparacion para arrays
 expresionstruct makecomparison(std::string &s1, std::string &s2, std::string &s3, std::vector<std::string> &s4) {
   expresionstruct tmp ; 
-  int n,x;
-
-  
+  int n,x,m;
+  std::string identificador = s4.back();
+  s4.pop_back();
+  m = s4.size();
   //codigo.anadirInstruccion(s4.back()) ;
   
   tmp.trues.push_back(codigo.obtenRef()) ;
   codigo.anadirInstruccion("if " + s1 + s2 + s3 + " goto") ;
 
-  if (!st.existeId(s4.back())){
+  if (!st.existeId(identificador)){
     codigo.anadirInstruccion("El identificador no esta definido");
   }
   else {
-    n = st.numArgsProcedimiento(s4.back());
-
-    std::pair <std::string,std::string> argumento = st.obtenerTiposParametro(s4.back(),0); 
-    //codigo.anadirInstruccion(s3 + " 1");
-    if (argumento.second != tipoNum(s3)){
-      //codigo.anadirInstruccion(argumento.second + " " + tipoNum(s3));
-      codigo.anadirInstruccion("Las variables no concuerdan en tipo");
-    }
-    s4.pop_back();
     x = s4.size();
+    for (int i = 0; i < m;i++){
+     //codigo.anadirInstruccion(s4.back());
+      if (st.existeId(s4.back())){
+          std::pair <std::string,std::string> argumento = st.obtenerTiposParametro(identificador,i);
+          if (argumento.second != tipoNum(s3)){
+            //codigo.anadirInstruccion(argumento.second + " " + tipoNum(s3));
+            codigo.anadirInstruccion("Las variables no concuerdan en tipo");
+
+          }
+      }
+      else{
+          if (!es_numero(s4.back())){
+            string str;
+
+            stringstream ss;  
+            ss << i;  
+            ss >> str;  
+            codigo.anadirInstruccion("La variable en el argumento " + str + " no esta definido");
+          }
+      }
+      s4.pop_back();
+    }
+    n = st.numArgsProcedimiento(identificador);
+
+    //s4.pop_back();
+    
     if (n != x){
       codigo.anadirInstruccion("No contiene las mismas dimensiones");
     }
@@ -654,11 +726,15 @@ expresionstruct makecomparison(std::string &s1, std::string &s2, std::string &s3
     codigo.anadirInstruccion("El identificador no esta definido");
   }
   else {
-    std::string tipodevar = st.obtenerTipo(s1);
-    //codigo.anadirInstruccion(s3 + " 2");
-    if (tipodevar != tipoNum(s3)){
-       codigo.anadirInstruccion("Las variables no concuerdan en tipo");
+    if (es_numero(s3)){
+        std::string tipodevar = st.obtenerTipo(s1);
+        //codigo.anadirInstruccion(s3 + " 2");
+        if (tipodevar != tipoNum(s3)){
+           codigo.anadirInstruccion("Las variables no concuerdan en tipo");
+        }
     }
+    else
+        codigo.anadirInstruccion("Hey1");
   }
   tmp.falses.push_back(codigo.obtenRef()) ;
   codigo.anadirInstruccion("goto") ;
@@ -689,26 +765,31 @@ expresionstruct makearithmetic(std::string &s1, std::string &s2, std::string &s3
   else {
     //codigo.anadirInstruccion(s1) ;
     std::string tipodevar = st.obtenerTipo(s1);
-
-    if(!st.existeId(s3)){
-      //codigo.anadirInstruccion("Hey1") ;
-      //Si s1 o s3 no estan definidos no funcionara nada
-      //codigo.anadirInstruccion("El identificador de arriba no esta definido");
-      //s3 es una variable temporal
-      if(tipodevar != tipoNum(s3)){
-         codigo.anadirInstruccion("Las variables no concuerdan en tipo");
-      }
+    if (es_numero(s3)){
+      
+        //codigo.anadirInstruccion("Hey1") ;
+        //Si s1 o s3 no estan definidos no funcionara nada
+        //codigo.anadirInstruccion("El identificador de arriba no esta definido");
+        //s3 es una variable temporal
+        if(tipodevar != tipoNum(s3)){
+           codigo.anadirInstruccion("Las variables no concuerdan en tipo");
+        }
     }
     else{
-      std::string tipodevar2 = st.obtenerTipo(s3);
-      if(tipodevar != tipodevar2){
-         codigo.anadirInstruccion("Las variables no concuerdan en tipo: " + tipodevar + ", " + tipodevar2);
-         //Aun sabiendo que no concuerdan en tipo s1 y s3 le damos a la variable temporal el tipo de s1
-         st.anadirVariable(tmp.str,st.obtenerTipo(s1));
-      }
-      else{
-         st.anadirVariable(tmp.str,st.obtenerTipo(s1));
-      }
+        if(st.existeId(s3)){
+          std::string tipodevar2 = st.obtenerTipo(s3);
+          if(tipodevar != tipodevar2){
+             codigo.anadirInstruccion("Las variables no concuerdan en tipo: " + tipodevar + ", " + tipodevar2);
+             //Aun sabiendo que no concuerdan en tipo s1 y s3 le damos a la variable temporal el tipo de s1
+             st.anadirVariable(tmp.str,st.obtenerTipo(s1));
+          }
+          else{
+             st.anadirVariable(tmp.str,st.obtenerTipo(s1));
+          }
+        }
+        else{
+          codigo.anadirInstruccion("No esta definida la variable " + s3);
+        }
     }
   }
   return tmp ;
