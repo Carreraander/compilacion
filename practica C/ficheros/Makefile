@@ -17,4 +17,7 @@ parser: $(FUENTES) Codigo.hpp Exp.hpp
 
 prueba: parser ./Pruebas
 	./parser <./Pruebas/PruebaBuena1.in
+	./parser <./Pruebas/PruebaBuena2.in
+	./parser <./Pruebas/PruebaMala1.in
+	./parser <./Pruebas/PruebaMala2.in
 

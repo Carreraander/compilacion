@@ -111,8 +111,8 @@ declaraciones :  tipo lista_de_ident TSEMIC
               {
                 std::string estruct = $2->back();
                 int w = $2->size(),k;
-                /*CODIGO PARA COMPROBAR LO QUE CONTIENE EL ARRAY Y SU DIMENSION
-                string str;
+                //CODIGO PARA COMPROBAR LO QUE CONTIENE EL ARRAY Y SU DIMENSION
+                /*string str;
                 stringstream ss;  
                 ss << w;  
                 ss >> str;  
@@ -121,7 +121,7 @@ declaraciones :  tipo lista_de_ident TSEMIC
                   $2->pop_back();
                 }
                 codigo.anadirInstruccion(str);*/
-                /*En realidad en vez de añadir como vairable cada procedimiento */
+                /*En realidad en vez de añadir como variable cada procedimiento */
 
                 if (estruct == "Array"){
                   // 5 posiciones de vector por cada array unidimensional + dimension del array
@@ -139,33 +139,36 @@ declaraciones :  tipo lista_de_ident TSEMIC
                     $2->pop_back();
  
                     //Creo procedimiento con el identificador
-                    st.anadirProcedimiento($2->back());
-                    std::string identificador = $2->back();
-                    //Quito el identificador del vector
-                    $2->pop_back();
-                    
-                    //Guardamos parametros segun la dimension (dimension inicializada a 0 para mayor facilidad)
-                    for (int i = 0; i < numdim + 1;i++){
-                      st.anadirParametro(identificador,*$1,*$1);
-                      $2->pop_back();
+                    if (st.existeId($2->back())){
+                      codigo.anadirInstruccion("La variable " + $2->back() + " ha sido definida previamente y no se puede volver a definir");
                     }
-            
-                    string str;
-                    //int n1 = st.numArgsProcedimiento(identificador);
+                    else{
+                      st.anadirProcedimiento($2->back());
+                      std::string identificador = $2->back();
 
-                    stringstream ss;  
-                    ss << k + numdim;  
-                    ss >> str;  
+                      //Quito el identificador del vector
+                      $2->pop_back();
+                      
+                      //Guardamos parametros segun la dimension (dimension inicializada a 0 para mayor facilidad)
+                      for (int i = 0; i < numdim + 1;i++){
+                        st.anadirParametro(identificador,*$1,*$1);
+                        $2->pop_back();
+                      }
+              
+                      string str;
+                      stringstream ss;  
+                      ss << k + numdim;  
+                      ss >> str;  
 
-                    //Nuevo vector para distinguir los arrays declarados en una misma linea
-                    std::vector<std::string> declarr;
-                    declarr.push_back($2->back());
-                    //Quito la declaracion del array del vector Ej: a[i]
-                    $2->pop_back();
+                      //Nuevo vector para distinguir los arrays declarados en una misma linea
+                      std::vector<std::string> declarr;
+                      declarr.push_back($2->back());
+                      //Quito la declaracion del array del vector Ej: a[i]
+                      $2->pop_back();
 
-                    codigo.anadirDeclaraciones(declarr, *$1);
-                    
-                    k = k + numdim ;
+                      codigo.anadirDeclaraciones(declarr, *$1);
+                    }
+                    k = k + numdim;
                   }
                 }
                 else{
@@ -526,7 +529,6 @@ expresion : expresion TEQUAL expresion
         codigo.completarInstrucciones($1->falses, $3);
         tmp.trues = *(unir($1->trues, $4->trues));
         tmp.falses = $4->falses;
-        //codigo.anadirInstruccion(tmp.trues.front()+ " " + tmp.falses.front());
         *$$ = tmp;
       }
       | expresion RAND M expresion
@@ -536,7 +538,6 @@ expresion : expresion TEQUAL expresion
         codigo.completarInstrucciones($1->trues, $3);
         tmp.trues = $4->trues;
         tmp.falses = *(unir($1->falses, $4->falses));
-        //codigo.anadirInstruccion(tmp.trues.front()+ " " + tmp.falses.front());
         *$$ = tmp;
       }
       | RNOT expresion
@@ -648,7 +649,6 @@ std::string tipoNum(const string& str)
 {
   std::string::size_type sz;
   std::stoi (str,&sz);
-  //codigo.anadirInstruccion(str.substr(sz));
   if (sz == str.length()) {
     return "ent";
   }
@@ -656,11 +656,13 @@ std::string tipoNum(const string& str)
     return "real";
   }
 }
-bool es_numero(const std::string& s)
-{
-    std::string::const_iterator it = s.begin();
-    while (it != s.end() && std::isdigit(*it)) ++it;
-    return !s.empty() && it == s.end();
+bool es_numero(const std::string &s) {
+  {
+    for (char const &c : s) {
+        if (std::isdigit(c) == 0) return false;
+    }
+    return true;
+}
 }
 
 //Comparacion para arrays
@@ -676,7 +678,7 @@ expresionstruct makecomparison(std::string &s1, std::string &s2, std::string &s3
   codigo.anadirInstruccion("if " + s1 + s2 + s3 + " goto") ;
 
   if (!st.existeId(identificador)){
-    codigo.anadirInstruccion("El identificador no esta definido");
+    codigo.anadirInstruccion("No esta definida la variable " + identificador);
   }
   else {
     x = s4.size();
@@ -723,7 +725,7 @@ expresionstruct makecomparison(std::string &s1, std::string &s2, std::string &s3
   tmp.trues.push_back(codigo.obtenRef()) ;
   codigo.anadirInstruccion("if " + s1 + s2 + s3 + " goto") ;
   if (!st.existeId(s1)){
-    codigo.anadirInstruccion("El identificador no esta definido");
+    codigo.anadirInstruccion("No esta definida la variable " + s1);
   }
   else {
     if (es_numero(s3)){
@@ -733,8 +735,6 @@ expresionstruct makecomparison(std::string &s1, std::string &s2, std::string &s3
            codigo.anadirInstruccion("Las variables no concuerdan en tipo");
         }
     }
-    else
-        codigo.anadirInstruccion("Hey1");
   }
   tmp.falses.push_back(codigo.obtenRef()) ;
   codigo.anadirInstruccion("goto") ;
@@ -757,17 +757,15 @@ expresionstruct makearithmetic(std::string &s1, std::string &s2, std::string &s3
   Importante los dos no pueden ser a la vez temporales s1 y s3, si no existe s1 s3 tiene que existir
     */
  
-
   if(!st.existeId(s1)){
-    //s1 se trata de una variable temporal o no esta declarada
-    codigo.anadirInstruccion("El identificador de arriba no esta definido");
+      //s1 se trata de una variable temporal o no esta declarado
+    codigo.anadirInstruccion("No esta definida la variable " + s1);
   }
   else {
     //codigo.anadirInstruccion(s1) ;
     std::string tipodevar = st.obtenerTipo(s1);
     if (es_numero(s3)){
       
-        //codigo.anadirInstruccion("Hey1") ;
         //Si s1 o s3 no estan definidos no funcionara nada
         //codigo.anadirInstruccion("El identificador de arriba no esta definido");
         //s3 es una variable temporal

@@ -1,9 +1,9 @@
 program ejemplo_error
 
  int a, b, c ;
- float ;
+ [*No debe contener una variable a la hora de declararse (hay que especificar un tamaño)*]
+ float a[e];
  int d;
- e;
  float f, h;
  
  proc  ( int <= x; int y; int <=> resul)
@@ -15,7 +15,8 @@ program ejemplo_error
 		do {  
 			resul = resul + 1;
 			skip if resul > 1000000;
-			aux = aux - 1;
+			[*Array de una dimension intentando utilizar dos*]
+			aux = a[e][b] - 1;
 			iteraciones = iteraciones + 1; 
 			} until  aux == 0 
 		else {

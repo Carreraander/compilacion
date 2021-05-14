@@ -1,7 +1,9 @@
 program ejemplo_con_nombre_muy_largo
-
+  int a,b,d,e,c,j;
 	proc suma(int <= x; int <= y; int <=> resul)
     int aux, resul, iteraciones;
+    [*Defino de nuevo las variables x e y ya que no las dectaria por que no he realizado la declaracion de subprogramas*]
+    int x,y;
     {
       if x==y{
   	   	if resul < 1000 or aux > 10{
@@ -17,10 +19,7 @@ program ejemplo_con_nombre_muy_largo
   			    else { 
               aux = 1;
             };
-      			iteraciones = iteraciones + 1;
-            iteraciones = iteraciones + 1;
-            iteraciones = iteraciones + 1;
-            iteraciones = iteraciones + 1;
+
       		}until aux == 0
           else { 
             aux = 1;
@@ -29,10 +28,10 @@ program ejemplo_con_nombre_muy_largo
       };					
   	}		
 	{
-    read(a);
+    read(a); 
     read(b);
-    d = 1/b;
-    e = 0.1e-1/a;
-    c = c*(c*d)+e;
-    println(c*c+e/d);
+    d = b/5;
+    c= c*(c*d)+1;
+    c = c + d + e + aux*j;
+    println(c);
   } 
