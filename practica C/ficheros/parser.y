@@ -1,15 +1,7 @@
 %error-verbose
 
 %{
-  /*TODO: 
-    - Llamadas a procedimientos?
-    - Arreglar arrays no deben tener un identificador dentro a la hora de declarar sino un int o float
-      - Mantener estructura 
-      - Modificar que como paramentros añada el integer a str
-      - Necesario comprobar el valor maximo del array? -> 
-        -> Se puede añadir como parametro 0 el valor maximo y simplemente es un if
-    - Realizar ETDS :_(
-  */
+
    #include <stdio.h>
    #include <iostream>
    #include <vector>
@@ -120,8 +112,8 @@ declaraciones :  tipo lista_de_ident TSEMIC
                   codigo.anadirInstruccion($2->back());
                   $2->pop_back();
                 }
-                codigo.anadirInstruccion(str);*/
-                /*En realidad en vez de añadir como variable cada procedimiento */
+                codigo.anadirInstruccion(str);
+                */
 
                 if (estruct == "Array"){
                   // 5 posiciones de vector por cada array unidimensional + dimension del array
@@ -154,11 +146,6 @@ declaraciones :  tipo lista_de_ident TSEMIC
                         st.anadirParametro(identificador,*$1,*$1);
                         $2->pop_back();
                       }
-              
-                      string str;
-                      stringstream ss;  
-                      ss << k + numdim;  
-                      ss >> str;  
 
                       //Nuevo vector para distinguir los arrays declarados en una misma linea
                       std::vector<std::string> declarr;
