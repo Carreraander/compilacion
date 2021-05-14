@@ -161,14 +161,10 @@ declaraciones :  tipo lista_de_ident TSEMIC
                 else{
                   codigo.anadirDeclaraciones(*$2, *$1);
                   for (int i = 0; i < w;i++){
-                    //codigo.anadirInstruccion($2->back());
                     st.anadirVariable($2->back(),*$1);
                     $2->pop_back();
                   }
-                  //stPila.empilar(st);
-                  //codigo.anadirDeclaraciones(*$2, *$1);
                 }
-                
               }
         declaraciones
       | TCOMMENT declaraciones
@@ -214,7 +210,7 @@ lista_de_ident : TIDENTIFIER resto_lista_id
         for (auto &auxi : *$5){
           $6->push_back(auxi);
         }
-        // Añadimos el primer parametro?
+        // Añadimos el primer parametro
         $6->push_back(*$3);
         // Añadimos el identificador
         $6->push_back(*$1);
@@ -421,7 +417,6 @@ sentencia :  variable TASSIG expresion TSEMIC
         //EXIT
         codigo.completarInstrucciones($4->exit, $10);
         codigo.completarInstrucciones($12->exit, $14);
-        //FALTA EL SKIP
         codigo.completarInstrucciones($4->skip, $7);
       }
       | RENDREPEAT RIF expresion M TSEMIC
@@ -659,7 +654,6 @@ expresionstruct makecomparison(std::string &s1, std::string &s2, std::string &s3
   std::string identificador = s4.back();
   s4.pop_back();
   m = s4.size();
-  //codigo.anadirInstruccion(s4.back()) ;
   
   tmp.trues.push_back(codigo.obtenRef()) ;
   codigo.anadirInstruccion("if " + s1 + s2 + s3 + " goto") ;
@@ -670,13 +664,10 @@ expresionstruct makecomparison(std::string &s1, std::string &s2, std::string &s3
   else {
     x = s4.size();
     for (int i = 0; i < m;i++){
-     //codigo.anadirInstruccion(s4.back());
       if (st.existeId(s4.back())){
           std::pair <std::string,std::string> argumento = st.obtenerTiposParametro(identificador,i);
           if (argumento.second != tipoNum(s3)){
-            //codigo.anadirInstruccion(argumento.second + " " + tipoNum(s3));
             codigo.anadirInstruccion("Las variables no concuerdan en tipo");
-
           }
       }
       else{
@@ -692,8 +683,6 @@ expresionstruct makecomparison(std::string &s1, std::string &s2, std::string &s3
       s4.pop_back();
     }
     n = st.numArgsProcedimiento(identificador);
-
-    //s4.pop_back();
     
     if (n != x){
       codigo.anadirInstruccion("No contiene las mismas dimensiones");
@@ -717,7 +706,6 @@ expresionstruct makecomparison(std::string &s1, std::string &s2, std::string &s3
   else {
     if (es_numero(s3)){
         std::string tipodevar = st.obtenerTipo(s1);
-        //codigo.anadirInstruccion(s3 + " 2");
         if (tipodevar != tipoNum(s3)){
            codigo.anadirInstruccion("Las variables no concuerdan en tipo");
         }
@@ -736,20 +724,13 @@ expresionstruct makearithmetic(std::string &s1, std::string &s2, std::string &s3
 
   tmp.str = codigo.nuevoId() ;
   codigo.anadirInstruccion(tmp.str + ":=" + s1 + s2 + s3 + ";") ;
-  /*Problemas:
-    s1 puede ser una variable temporal
-    s3 puede ser otra variable temporal
-  Soluciones:
-    Si s1 es temporal vamos a suponer que tiene el mismo tipo que s3
-  Importante los dos no pueden ser a la vez temporales s1 y s3, si no existe s1 s3 tiene que existir
-    */
- 
+
   if(!st.existeId(s1)){
       //s1 se trata de una variable temporal o no esta declarado
     codigo.anadirInstruccion("No esta definida la variable " + s1);
   }
   else {
-    //codigo.anadirInstruccion(s1) ;
+
     std::string tipodevar = st.obtenerTipo(s1);
     if (es_numero(s3)){
       
@@ -780,7 +761,6 @@ expresionstruct makearithmetic(std::string &s1, std::string &s2, std::string &s3
   return tmp ;
 }
 
-//Falta la función unir
 vector<int> *unir(vector<int> lis1, vector<int> lis2){
   std::vector<int> *nuevalista = new vector<int>;
   nuevalista->insert(nuevalista->begin(), lis1.begin(), lis1.end());
